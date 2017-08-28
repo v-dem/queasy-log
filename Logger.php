@@ -4,7 +4,9 @@ namespace queasy\log;
 
 use queasy\config\ConfigTrait;
 
-class Logger
+use Psr\Log\AbstractLogger;
+
+class Logger implements AbstractLogger
 {
 
     use ConfigTrait;
@@ -61,6 +63,11 @@ class Logger
     public static function error($message, $prefix = '')
     {
         self::message(self::LEVEL_ERROR, $message, true, $prefix);
+    }
+
+    public function log($level, $message, array $context = array())
+    {
+        $this->message();
     }
 
     private static function message($level, $message, $sendEmail = true, $prefix = '')
