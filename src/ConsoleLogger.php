@@ -4,17 +4,17 @@ namespace queasy\log;
 
 use Psr\Log\LogLevel;
 
-use queasy\config\ConfigInterface;
-
 class ConsoleLogger extends LoggerAggregate
 {
     const DEFAULT_MESSAGE_FORMAT = '[%5$s] %6$s %7$s';
 
-    public function __construct(ConfigInterface $config)
-    {
-        parent::__construct($config);
-    }
-
+    /**
+     * Console log method.
+     *
+     * @param string $level Log level
+     * @param string $message Log message
+     * @param array|null $context Context
+     */
     public function log($level, $message, array $context = array())
     {
         parent::log($level, $message, $context);
