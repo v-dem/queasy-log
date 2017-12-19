@@ -263,11 +263,27 @@ class LoggerAggregate extends AbstractLogger
     }
 
     /**
+     * Build exception string.
+     *
+     * @param Throwable $ex Exception instance
+     *
+     * @return string Exception string
+     */
+    protected function exception($ex)
+    {
+        return get_class($ex) . ': ' . $ex->getMessage() . ' in ' . $ex->getFile() . '(' . $ex->getLine() . ')' . PHP_EOL
+            . 'Stack trace:' . PHP_EOL
+            . $ex->getTraceAsString() . PHP_EOL;
+    }
+
+    /**
      * Build context string.
      *
      * @param array|null $context Log message context
      *
      * @return string Context string
+     *
+     * @throws \InvalidArgumentException When 'exception' key in $context doesn't contain a Throwable or Exception instance
      */
     protected function context(array $context = null)
     {
@@ -280,13 +296,11 @@ class LoggerAggregate extends AbstractLogger
         if (isset($context['exception'])) {
             $ex = $context['exception'];
 
+            unset($context['exception']);
+
             if (interface_exists('\Throwable') && is_subclass_of($ex, '\Throwable')
                     || ($ex instanceof Exception)) {
-                $result .= get_class($ex) . ': ' . $ex->getMessage() . ' in ' . $ex->getFile() . '(' . $ex->getLine() . ')' . PHP_EOL;
-                $result .= 'Stack trace:' . PHP_EOL;
-                $result .= $ex->getTraceAsString() . PHP_EOL;
-
-                unset($context['exception']);
+                $result .= $this->exception($ex);
             } else {
                 throw new StandardInvalidArgumentException('Value of \'exception\' key in $context does not contain valid Throwable or Exception instance.');
             }
