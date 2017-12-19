@@ -2,72 +2,65 @@
 
 namespace queasy\log;
 
-use queasy\config\ConfigTrait;
-
 use Psr\Log\AbstractLogger;
+use Psr\Log\LogLevel;
+
+use queasy\config\ConfigInterface;
 
 class Logger implements AbstractLogger
 {
 
-    use ConfigTrait;
+    const DEFAULT_TIME_FORMAT = 'Y-m-d H:i:s.u T';
+    const DEFAULT_HISTORY_LENGTH = 10;
 
-    const LEVEL_DEBUG = 0;
-    const LEVEL_INFO = 1;
-    const LEVEL_WARNING = 2;
-    const LEVEL_ERROR = 3;
-
-    const DEFAULT_PATH = 'logs' . DIRECTORY_SEPARATOR . 'debug.log';
-
-    private static $path = self::DEFAULT_PATH;
-    private static $debugMode = true;
-    private static $processName = null;
-    private static $sendEmail = false;
-    private static $mailTo = null;
-    private static $timeFormat = 'Y-m-d H:i:s.u T';
-    private static $historyLength = 10;
-
-    private static $history;
-
-    public static function init()
+    public static function level2int($level)
     {
-        $config = self::config();
-
-        self::$path = $config->get('path', self::$path);
-        self::$debugMode = $config->get('debugMode', self::$debugMode);
-        self::$processName = $config->get('processName', self::$processName);
-        self::$sendEmail = $config->get('sendEmail', self::$sendEmail);
-        self::$mailTo = $config->get('mailTo', self::$mailTo);
-        self::$timeFormat = $config->get('timeFormat', self::$timeFormat);
-        self::$historyLength = $config->get('historyLength', self::$historyLength);
-
-        self::$history = array();
-    }
-
-    public static function debug($message, $prefix = '')
-    {
-        if (self::$debugMode) {
-            self::message(self::LEVEL_DEBUG, $message, true, $prefix);
+        switch ($level) {
+            case LogLevel::DEBUG:
+                return 0;
+            case LogLevel::INFO:
+                return 1;
+            case LogLevel::NOTICE:
+                return 2;
+            case LogLevel::WARNING:
+                return 3;
+            case LogLevel::ERROR:
+                return 4;
+            case LogLevel::CRITICAL:
+                return 5;
+            case LogLevel::ALERT:
+                return 6;
+            case LogLevel::EMERGENCY:
+                return 7;
+            default:
+                return 0;
         }
     }
 
-    public static function info($message, $prefix = '')
-    {
-        self::message(self::LEVEL_INFO, $message, true, $prefix);
-    }
+    private $path;
+    private $debugMode;
+    private $processName;
+    private $sendEmail;
+    private $mailTo;
+    private $timeFormat;
+    private $historyLength;
 
-    public static function warning($message, $prefix = '')
-    {
-        self::message(self::LEVEL_WARNING, $message, true, $prefix);
-    }
+    private $history = array();
 
-    public static function error($message, $prefix = '')
+    public function __construct(ConfigInterface $config)
     {
-        self::message(self::LEVEL_ERROR, $message, true, $prefix);
+        $this->path = $config->get('path', self::DEFAULT_PATH);
+        $this->debugMode = $config->get('debugMode', false);
+        $this->processName = $config->get('processName', '');
+        $this->sendEmail = $config->get('sendEmail', false);
+        $this->mailTo = $config->get('mailTo', null);
+        $this->timeFormat = $config->get('timeFormat', self::DEFAULT_TIME_FORMAT);
+        $this->historyLength = $config->get('historyLength', self::DEFAULT_HISTORY_LENGTH);
     }
 
     public function log($level, $message, array $context = array())
     {
-        $this->message();
+        
     }
 
     private static function message($level, $message, $sendEmail = true, $prefix = '')
