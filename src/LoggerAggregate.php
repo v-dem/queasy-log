@@ -56,7 +56,7 @@ class LoggerAggregate extends AbstractLogger
         $this->maxLevel = $config->get('maxLevel', self::DEFAULT_MAX_LEVEL);
         $this->processName = $config->processName;
         $this->timeFormat = $config->get('timeFormat', self::DEFAULT_TIME_FORMAT);
-        $this->messageFormat = $config->get('messageFormat', self::DEFAULT_MESSAGE_FORMAT);
+        $this->messageFormat = $config->get('messageFormat', static::DEFAULT_MESSAGE_FORMAT);
 
         $this->loggers = array();
 
@@ -173,7 +173,7 @@ class LoggerAggregate extends AbstractLogger
 
     protected function prepareMessage($level, $message, array $context = array())
     {
-        return sprintf(
+        return trim(sprintf(
             $this->messageFormat(),
             $this->logTime(),
             $this->processName(),
@@ -182,7 +182,7 @@ class LoggerAggregate extends AbstractLogger
             $this->logLevel($level),
             $this->message($message),
             $this->context($context)
-        );
+        ));
     }
 }
 
