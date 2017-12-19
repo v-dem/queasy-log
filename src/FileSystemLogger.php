@@ -26,7 +26,7 @@ class FileSystemLogger extends LoggerAggregate
 
         $preparedMessage = $this->prepareMessage($level, $message, $context);
 
-        file_put_contents($this->path, $preparedMessage, FILE_APPEND | LOCK_EX);
+        file_put_contents($this->path, $preparedMessage . PHP_EOL, FILE_APPEND | LOCK_EX);
     }
 }
 

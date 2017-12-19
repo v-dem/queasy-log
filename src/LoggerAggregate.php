@@ -16,7 +16,7 @@ class LoggerAggregate extends AbstractLogger
     const DEFAULT_MIN_LEVEL = LogLevel::DEBUG;
     const DEFAULT_MAX_LEVEL = LogLevel::EMERGENCY;
     const DEFAULT_TIME_FORMAT = 'Y-m-d H:i:s.u T';
-    const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [IP %4$s] [%5$s] %6$s %7$s'; // 1) time, 2) process name, 3) session id, 4) ip address, 5) log level, 6) message, 7) context
+    const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [%4$s] [%5$s] %6$s %7$s'; // 1) time, 2) process name, 3) session id, 4) ip address, 5) log level, 6) message, 7) context
 
     public static function level2int($level)
     {
