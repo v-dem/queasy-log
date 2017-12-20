@@ -1,9 +1,20 @@
 <?php
 
+/*
+ * Queasy PHP Framework - Logger
+ *
+ * (c) Vitaly Demyanenko <vitaly_demyanenko@yahoo.com>
+ *
+ * For the full copyright and license information, please view the LICENSE file that was distributed with this source code.
+ */
+
 namespace queasy\log;
 
 use queasy\config\ConfigInterface;
 
+/**
+ * File system logger
+ */
 class FileSystemLogger extends LoggerAggregate
 {
     const DEFAULT_PATH = 'logs/debug.log';

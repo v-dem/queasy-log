@@ -1,9 +1,20 @@
 <?php
 
+/*
+ * Queasy PHP Framework - Logger
+ *
+ * (c) Vitaly Demyanenko <vitaly_demyanenko@yahoo.com>
+ *
+ * For the full copyright and license information, please view the LICENSE file that was distributed with this source code.
+ */
+
 namespace queasy\log;
 
 use Psr\Log\LogLevel;
 
+/**
+ * Console logger
+ */
 class ConsoleLogger extends LoggerAggregate
 {
     const DEFAULT_MESSAGE_FORMAT = '[%5$s] %6$s %7$s';

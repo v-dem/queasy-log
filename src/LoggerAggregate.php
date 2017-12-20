@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * Queasy PHP Framework - Logger
+ *
+ * (c) Vitaly Demyanenko <vitaly_demyanenko@yahoo.com>
+ *
+ * For the full copyright and license information, please view the LICENSE file that was distributed with this source code.
+ */
+
 namespace queasy\log;
 
 use Exception;
@@ -11,6 +19,9 @@ use Psr\Log\LogLevel;
 
 use queasy\config\ConfigInterface;
 
+/**
+ * Logger aggregator class
+ */
 class LoggerAggregate extends AbstractLogger
 {
     const DEFAULT_MIN_LEVEL = LogLevel::DEBUG;
@@ -89,6 +100,10 @@ class LoggerAggregate extends AbstractLogger
      */
     private $loggers;
 
+    private $oldErrorHandler;
+
+    private $oldExceptionHandler;
+
     /**
      * Constructor.
      *
@@ -108,8 +123,8 @@ class LoggerAggregate extends AbstractLogger
 
         foreach ($config as $section) {
             if (($section instanceof ConfigInterface)
-                    && isset($section['logger'])) {
-                $className = $section['logger'];
+                    && isset($section['loggerClass'])) {
+                $className = $section['loggerClass'];
                 if (!class_exists($className)) {
                     throw new InvalidArgumentException(sprintf('Logger class "%s" does not exist.', $className));
                 }
@@ -121,6 +136,14 @@ class LoggerAggregate extends AbstractLogger
 
                 $this->loggers[] = new $className($section);
             }
+        }
+
+        // Weird way to detect if we are a top-level Logger in config
+        if (!$config['loggerClass']) {
+            // TODO: Set error and exception handlers
+            $this->info('SETTING EXCEPTION HANDLER....');
+            $this->oldErrorHandler = set_error_handler(array($this, 'handleError'));
+            $this->oldExceptionHandler = set_exception_handler(array($this, 'handleException'));
         }
     }
 
@@ -139,6 +162,89 @@ class LoggerAggregate extends AbstractLogger
                 $logger->log($level, $message, $context);
             }
         }
+    }
+
+    /**
+     * Errors handler.
+     *
+     * @param int $errNo Error code
+     * @param string $errStr Error message
+     * @param string|null $errFile Error file
+     * @param int|null $errLine Error line
+     *
+     * @return bool Indicates whether error was handled or not
+     */
+    public function handleError($errNo, $errStr, $errFile = null, $errLine = null)
+    {
+        switch ($errNo) {
+            case E_NOTICE:
+            case E_USER_NOTICE:
+            case E_DEPRECATED:
+            case E_USER_DEPRECATED:
+            case E_STRICT:
+                $logLevel = LogLevel::NOTICE;
+                break;
+
+            case E_WARNING:
+            case E_CORE_WARNING:
+            case E_COMPILE_WARNING:
+            case E_USER_WARNING:
+                $logLevel = LogLevel::WARNING;
+                break;
+
+            default:
+                $logLevel = LogLevel::ERROR;
+        }
+
+        $this->log($logLevel, $this->errorString($errNo, $errStr, $errFile, $errLine));
+
+        $oldHandler = $this->oldErrorHandler();
+        if ($oldHandler) {
+            return $oldHandler($errNo, $errStr, $errFile, $errLine);
+        }
+
+        return false;
+    }
+
+    /**
+     * Exceptions handler.
+     *
+     * @param Throwable|Exception $ex Exception instance
+     *
+     * @return bool Indicates whether exception was handled or not
+     */
+    public function handleException($ex)
+    {
+        $this->error('Uncaught', array(
+            'exception' => $ex
+        ));
+
+        $oldHandler = $this->oldExceptionHandler();
+        if ($oldHandler) {
+            return $oldHandler($ex);
+        }
+
+        return false;
+    }
+
+    /**
+     * Return old error handler.
+     *
+     * @return callable Old error handler
+     */
+    protected function oldErrorHandler()
+    {
+        return $this->oldErrorHandler;
+    }
+
+    /**
+     * Return old exception handler.
+     *
+     * @return callable Old exception handler
+     */
+    protected function oldExceptionHandler()
+    {
+        return $this->oldExceptionHandler;
     }
 
     /**
@@ -206,7 +312,7 @@ class LoggerAggregate extends AbstractLogger
      *
      * @return string Time string
      */
-    protected function logTime()
+    protected function logTimeString()
     {
         $uTimestamp = microtime(true);
         $timestamp = floor($uTimestamp);
@@ -217,21 +323,31 @@ class LoggerAggregate extends AbstractLogger
     }
 
     /**
-     * Get session id.
+     * Get process name string.
+     *
+     * @return string Process name
+     */
+    protected function processNameString()
+    {
+        return $this->processName();
+    }
+
+    /**
+     * Get session id string.
      *
      * @return string Session id
      */
-    protected function sessionId()
+    protected function sessionIdString()
     {
         return session_id();
     }
 
     /**
-     * Get IP address.
+     * Get IP address string.
      *
      * @return string IP address
      */
-    protected function ipAddress()
+    protected function ipAddressString()
     {
         if (isset($_SERVER) && isset($_SERVER['REMOTE_ADDR'])) {
             return $_SERVER['REMOTE_ADDR'];
@@ -239,25 +355,25 @@ class LoggerAggregate extends AbstractLogger
     }
 
     /**
-     * Get log level.
+     * Get log level string.
      *
      * @param string $level Source log level
      *
      * @return string Log level
      */
-    protected function logLevel($level)
+    protected function logLevelString($level)
     {
         return strtoupper($level);
     }
 
     /**
-     * Get message.
+     * Get message string.
      *
      * @param string $message Source message
      *
      * @return string Message
      */
-    protected function message($message)
+    protected function messageString($message)
     {
         return $message;
     }
@@ -265,15 +381,32 @@ class LoggerAggregate extends AbstractLogger
     /**
      * Build exception string.
      *
-     * @param Throwable $ex Exception instance
+     * @param Throwable|Exception $ex Throwable or Exception instance
      *
      * @return string Exception string
      */
-    protected function exception($ex)
+    protected function exceptionString($ex)
     {
         return get_class($ex) . ': ' . $ex->getMessage() . ' in ' . $ex->getFile() . '(' . $ex->getLine() . ')' . PHP_EOL
             . 'Stack trace:' . PHP_EOL
             . $ex->getTraceAsString() . PHP_EOL;
+    }
+
+    /**
+     * Build error string.
+     *
+     * @param int $errNo Error code
+     * @param string $errStr Error message
+     * @param string|null $errFile Error file
+     * @param int|null $errLine Error line
+     *
+     * @return string Exception string
+     */
+    protected function errorString($errNo, $errStr, $errFile = null, $errLine = null)
+    {
+        return $errStr
+            . ($errFile? ' in ' . $errFile: '')
+            . ($errLine? '(' . $errLine . ')': '');
     }
 
     /**
@@ -285,7 +418,7 @@ class LoggerAggregate extends AbstractLogger
      *
      * @throws \InvalidArgumentException When 'exception' key in $context doesn't contain a Throwable or Exception instance
      */
-    protected function context(array $context = null)
+    protected function contextString(array $context = null)
     {
         if (is_null($context)) {
             return '';
@@ -300,7 +433,7 @@ class LoggerAggregate extends AbstractLogger
 
             if (interface_exists('\Throwable') && is_subclass_of($ex, '\Throwable')
                     || ($ex instanceof Exception)) {
-                $result .= $this->exception($ex);
+                $result .= $this->exceptionString($ex);
             } else {
                 throw new StandardInvalidArgumentException('Value of \'exception\' key in $context does not contain valid Throwable or Exception instance.');
             }
@@ -322,13 +455,13 @@ class LoggerAggregate extends AbstractLogger
     {
         return trim(sprintf(
             $this->messageFormat(),
-            $this->logTime(),
-            $this->processName(),
-            $this->sessionId(),
-            $this->ipAddress(),
-            $this->logLevel($level),
-            $this->message($message),
-            $this->context($context)
+            $this->logTimeString(),
+            $this->processNameString(),
+            $this->sessionIdString(),
+            $this->ipAddressString(),
+            $this->logLevelString($level),
+            $this->messageString($message),
+            $this->contextString($context)
         ));
     }
 }
