@@ -2,6 +2,7 @@
     "name": "v-dem/queasy-log",
     "description": "Logger classes, part of Queasy PHP framework",
     "keywords": ["file system logger", "console logger", "email logger"],
+    "license": "LGPL-3",
     "minimum-stability": "dev",
     "authors": [
         {
