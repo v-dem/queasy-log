@@ -17,26 +17,7 @@ use queasy\config\ConfigInterface;
  */
 class FileSystemLogger extends LoggerAggregate
 {
-    const DEFAULT_PATH = 'logs/debug.log';
-
-    /**
-     * @var string Log file path
-     */
-    private $path;
-
-    /**
-     * Constructor.
-     *
-     * @param ConfigInterface $config Logger configuration
-     *
-     * @throws InvalidArgumentException Can be thrown by parent class
-     */
-    public function __construct(ConfigInterface $config)
-    {
-        parent::__construct($config);
-
-        $this->path = $config->get('path', self::DEFAULT_PATH);
-    }
+    const DEFAULT_PATH = 'debug.log';
 
     /**
      * File system log method.
@@ -61,7 +42,7 @@ class FileSystemLogger extends LoggerAggregate
      */
     protected function path()
     {
-        return $this->path;
+        return $this->config()->get('path', static::DEFAULT_PATH);
     }
 }
 

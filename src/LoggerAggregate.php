@@ -29,7 +29,16 @@ class LoggerAggregate extends AbstractLogger
 
     const DEFAULT_TIME_FORMAT = 'Y-m-d H:i:s.u T';
 
-    // 1) time, 2) process name, 3) session id, 4) ip address, 5) log level, 6) message, 7) context
+    /**
+     * @const string Message format that is acceptable by sprintf() function, passed parameters are (by order)
+     *              1) time string,
+     *              2) process name,
+     *              3) session id,
+     *              4) IP address,
+     *              5) log level,
+     *              6) message,
+     *              7) context
+     */
     const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [%4$s] [%5$s] %6$s %7$s';
 
     /**
@@ -44,64 +53,51 @@ class LoggerAggregate extends AbstractLogger
         switch (strtolower($level)) {
             case LogLevel::DEBUG:
                 return 0;
+
             case LogLevel::INFO:
                 return 1;
+
             case LogLevel::NOTICE:
                 return 2;
+
             case LogLevel::WARNING:
                 return 3;
+
             case LogLevel::ERROR:
                 return 4;
+
             case LogLevel::CRITICAL:
                 return 5;
+
             case LogLevel::ALERT:
                 return 6;
+
             case LogLevel::EMERGENCY:
                 return 7;
+
             default:
                 return 0;
         }
     }
 
     /**
-     * @var string Min log level for this logger
+     * @var ConfigInterface Logger configuration instance
      */
-    private $minLevel;
-
-    /**
-     * @var string Max log level
-     */
-    private $maxLevel;
-
-    /**
-     * @var string|null Process name to be displayed in log
-     */
-    private $processName;
-
-    /**
-     * @var string Time format string that is acceptable by date() function
-     */
-    private $timeFormat;
-
-    /**
-     * @var string Message format that is acceptable by sprintf() function, passed parameters are (by order)
-     *              1) time string,
-     *              2) process name,
-     *              3) session id,
-     *              4) IP address,
-     *              5) log level,
-     *              6) message,
-     *              7) context
-     */
-    private $messageFormat;
+    private $config;
 
     /**
      * @var array Subordinated loggers
      */
     private $loggers;
 
+    /**
+     * @var callable Old error handler
+     */
     private $oldErrorHandler;
 
+    /**
+     * @var callable Old exception handler
+     */
     private $oldExceptionHandler;
 
     /**
@@ -113,11 +109,7 @@ class LoggerAggregate extends AbstractLogger
      */
     public function __construct(ConfigInterface $config)
     {
-        $this->minLevel = $config->get('minLevel', self::DEFAULT_MIN_LEVEL);
-        $this->maxLevel = $config->get('maxLevel', self::DEFAULT_MAX_LEVEL);
-        $this->processName = $config->processName;
-        $this->timeFormat = $config->get('timeFormat', self::DEFAULT_TIME_FORMAT);
-        $this->messageFormat = $config->get('messageFormat', static::DEFAULT_MESSAGE_FORMAT);
+        $this->config = $config;
 
         $this->loggers = array();
 
@@ -255,6 +247,11 @@ class LoggerAggregate extends AbstractLogger
         return $this->loggers;
     }
 
+    protected function config()
+    {
+        return $this->config;
+    }
+
     /**
      * Get min log level.
      *
@@ -262,7 +259,7 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function minLevel()
     {
-        return $this->minLevel;
+        return $this->config()->get('minLevel', static::DEFAULT_MIN_LEVEL);
     }
 
     /**
@@ -272,7 +269,7 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function maxLevel()
     {
-        return $this->maxLevel;
+        return $this->config()->get('maxLevel', static::DEFAULT_MAX_LEVEL);
     }
 
     /**
@@ -282,7 +279,7 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function processName()
     {
-        return $this->processName;
+        return $this->config()->get('processName');
     }
 
     /**
@@ -292,7 +289,7 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function timeFormat()
     {
-        return $this->timeFormat;
+        return $this->config()->get('timeFormat', static::DEFAULT_TIME_FORMAT);
     }
 
     /**
@@ -302,7 +299,7 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function messageFormat()
     {
-        return $this->messageFormat;
+        return $this->config()->get('messageFormat', static::DEFAULT_MESSAGE_FORMAT);
     }
 
     /**
