@@ -111,25 +111,6 @@ class LoggerAggregate extends AbstractLogger
     {
         $this->config = $config;
 
-        $this->loggers = array();
-
-        foreach ($config as $section) {
-            if (($section instanceof ConfigInterface)
-                    && isset($section['loggerClass'])) {
-                $className = $section['loggerClass'];
-                if (!class_exists($className)) {
-                    throw new InvalidArgumentException(sprintf('Logger class "%s" does not exist.', $className));
-                }
-
-                $interfaces = class_implements($className);
-                if (!$interfaces || !isset($interfaces['Psr\Log\LoggerInterface'])) {
-                    throw new InvalidArgumentException(sprintf('Logger class "%s" does not implement Psr\Log\LoggerInterface.', $className));
-                }
-
-                $this->loggers[] = new $className($section);
-            }
-        }
-
         // Weird way to detect if we are a top-level Logger in config
         if (!$config['loggerClass']) {
             $this->oldErrorHandler = set_error_handler(array($this, 'handleError'));
@@ -244,6 +225,27 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function loggers()
     {
+        if (!$this->loggers) {
+            $this->loggers = array();
+
+            foreach ($this->config() as $section) {
+                if (($section instanceof ConfigInterface)
+                        && isset($section['loggerClass'])) {
+                    $className = $section['loggerClass'];
+                    if (!class_exists($className)) {
+                        throw new InvalidArgumentException(sprintf('Logger class "%s" does not exist.', $className));
+                    }
+
+                    $interfaces = class_implements($className);
+                    if (!$interfaces || !isset($interfaces['Psr\Log\LoggerInterface'])) {
+                        throw new InvalidArgumentException(sprintf('Logger class "%s" does not implement Psr\Log\LoggerInterface.', $className));
+                    }
+
+                    $this->loggers[] = new $className($section);
+                }
+            }
+        }
+
         return $this->loggers;
     }
 
@@ -370,7 +372,9 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function messageString($message)
     {
-        return $message;
+        return (is_object($message) || is_array($message))
+            ? print_r($message, true)
+            : $message;
     }
 
     /**
