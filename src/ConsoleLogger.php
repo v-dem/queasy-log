@@ -46,7 +46,7 @@ class ConsoleLogger extends LoggerAggregate
                 $prepend = "\033[31m";
                 break;
             case LogLevel::EMERGENCY:
-                $prepend = "\033[37;41;1m";
+                $prepend = "\033[37;41m";
         }
 
         if ($prepend) {
