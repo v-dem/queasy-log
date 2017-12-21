@@ -11,9 +11,7 @@
 namespace queasy\log;
 
 use Exception;
-use InvalidArgumentException as StandardInvalidArgumentException;
 
-use Psr\Log\InvalidArgumentException;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
@@ -233,12 +231,13 @@ class LoggerAggregate extends AbstractLogger
                         && isset($section['loggerClass'])) {
                     $className = $section['loggerClass'];
                     if (!class_exists($className)) {
-                        throw new InvalidArgumentException(sprintf('Logger class "%s" does not exist.', $className));
+                        throw InvalidArgumentException::loggerNotExists($className);
                     }
 
+                    $interfaceName = 'Psr\Log\LoggerInterface';
                     $interfaces = class_implements($className);
-                    if (!$interfaces || !isset($interfaces['Psr\Log\LoggerInterface'])) {
-                        throw new InvalidArgumentException(sprintf('Logger class "%s" does not implement Psr\Log\LoggerInterface.', $className));
+                    if (!$interfaces || !isset($interfaces[$interfaceName])) {
+                        throw InvalidArgumentException::interfaceNotImplemented($className, $interfaceName);
                     }
 
                     $this->loggers[] = new $className($section);
@@ -434,7 +433,7 @@ class LoggerAggregate extends AbstractLogger
                     || ($ex instanceof Exception)) {
                 $result .= $this->exceptionString($ex);
             } else {
-                throw new StandardInvalidArgumentException('Value of \'exception\' key in $context does not contain valid Throwable or Exception instance.');
+                throw InvalidArgumentException::invalidContextException();
             }
         }
 
