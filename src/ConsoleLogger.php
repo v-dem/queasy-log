@@ -32,30 +32,58 @@ class ConsoleLogger extends LoggerAggregate
 
         $prepend = '';
         $append = '';
-        switch ($level) {
-            case LogLevel::INFO:
-            case LogLevel::NOTICE:
-                $prepend = "\033[32m";
-                break;
-            case LogLevel::WARNING:
-                $prepend = "\033[33m";
-                break;
-            case LogLevel::ERROR:
-            case LogLevel::CRITICAL:
-            case LogLevel::ALERT:
-                $prepend = "\033[31m";
-                break;
-            case LogLevel::EMERGENCY:
-                $prepend = "\033[37;41m";
-        }
 
-        if ($prepend) {
-            $append = "\033[m";
+        if ($this->hasColorSupport()) {
+            switch ($level) {
+                case LogLevel::INFO:
+                case LogLevel::NOTICE:
+                    $prepend = "\033[32m";
+                    break;
+
+                case LogLevel::WARNING:
+                    $prepend = "\033[33m";
+                    break;
+
+                case LogLevel::ERROR:
+                case LogLevel::CRITICAL:
+                case LogLevel::ALERT:
+                    $prepend = "\033[31m";
+                    break;
+
+                case LogLevel::EMERGENCY:
+                    $prepend = "\033[37;41m";
+            }
+
+            if ($prepend) {
+                $append = "\033[m";
+            }
         }
 
         $preparedMessage = $prepend . $this->prepareMessage($level, $message, $context) . $append;
 
         echo $preparedMessage . PHP_EOL;
+    }
+
+    /**
+     * Detect if terminal supports coloured output. Stolen from Symfony.
+     *
+     * @return bool True if colors supported, false otherwise
+     */
+    protected function hasColorSupport()
+    {
+        return
+            (
+                (DIRECTORY_SEPARATOR === "\\")
+                && (
+                    false !== getenv('ANSICON')
+                    || 'on' === strtolower(getenv('ConEmuANSI'))
+                    || 'xterm' === strtolower(getenv('TERM'))
+                )
+            )
+            || (
+                function_exists('posix_isatty')
+                && @posix_isatty(STDOUT)
+            );
     }
 }
 
