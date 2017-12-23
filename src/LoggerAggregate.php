@@ -228,8 +228,8 @@ class LoggerAggregate extends AbstractLogger
 
             foreach ($this->config() as $section) {
                 if (($section instanceof ConfigInterface)
-                        && isset($section['loggerClass'])) {
-                    $className = $section['loggerClass'];
+                        && isset($section->loggerClass)) {
+                    $className = $section->loggerClass;
                     if (!class_exists($className)) {
                         throw InvalidArgumentException::loggerNotExists($className);
                     }
@@ -280,7 +280,7 @@ class LoggerAggregate extends AbstractLogger
      */
     protected function processName()
     {
-        return $this->config()->get('processName');
+        return $this->config()->processName;
     }
 
     /**

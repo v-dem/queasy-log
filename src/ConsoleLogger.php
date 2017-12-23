@@ -72,18 +72,13 @@ class ConsoleLogger extends LoggerAggregate
     protected function hasColorSupport()
     {
         return
-            (
-                (DIRECTORY_SEPARATOR === "\\")
-                && (
-                    false !== getenv('ANSICON')
-                    || 'on' === strtolower(getenv('ConEmuANSI'))
-                    || 'xterm' === strtolower(getenv('TERM'))
-                )
-            )
-            || (
-                function_exists('posix_isatty')
-                && @posix_isatty(STDOUT)
-            );
+            ((DIRECTORY_SEPARATOR === "\\")
+                && (('10.0.10586' === PHP_WINDOWS_VERSION_MAJOR . '.' . PHP_WINDOWS_VERSION_MINOR . '.' . PHP_WINDOWS_VERSION_BUILD)
+                    (false !== getenv('ANSICON'))
+                    || ('on' === strtolower(getenv('ConEmuANSI')))
+                    || ('xterm' === strtolower(getenv('TERM')))))
+            || (function_exists('posix_isatty')
+                && @posix_isatty(STDOUT));
     }
 }
 
