@@ -42,6 +42,7 @@ return [
     'logger' => [
         'loggerClass' => 'queasy\log\FileSystemLogger', // Logger class to be instantiated
         'setErrorHandlers' => true, // This option says to set error and exception handlers
+        'processName' => 'test', // Process name, to differentiate log messages from different sources
         'minLevel' => 'debug', // Message's minimum acceptable log level
         'path' => 'debug.log' // Path to logger output file
     ]
@@ -75,4 +76,9 @@ Output debug message:
 ```php
 $logger->debug('Test debug message.');
 ```
+
+In `debug.log` you'll see something like this:
+
+    2017-12-24 16:13:09.302334 EET test [] [] [DEBUG] Test debug message.
+
 
