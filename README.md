@@ -12,17 +12,10 @@ Contains logger classes compatible with PSR-3 logger interface. Currenly file sy
 * Nested loggers support.
 * Output message format is fully configurable.
 
-### Dependencies
-
-#### Production
+### Requirements
 
 * PHP version 5.3 or higher
 * Package `v-dem/queasy-config`
-
-#### Development
-
-* PHP version 5.6 or higher (PHPUnit requirement)
-* PHPUnit 5.7
 
 ### Documentation
 
