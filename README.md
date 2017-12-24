@@ -48,6 +48,8 @@ return [
 ];
 ```
 
+#### Creating logger instance
+
 Include Composer autoloader:
 
 ```php
@@ -65,6 +67,8 @@ Create logger instance:
 ```php
 $logger = queasy\log\Logger::create($config->logger);
 ```
+
+#### Writing messages to log
 
 Output debug message:
 
