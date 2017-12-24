@@ -2,9 +2,15 @@
 
 ## Package `v-dem/queasy-log`
 
+Contains logger classes compatible with PSR-3 logger interface. Currenly file system and console loggers are implemented.
+
 ### Features
 
 * PSR-3 compatible.
+* Easy to use.
+* Easy to extend.
+* Nested loggers support.
+* Output message format is fully configurable.
 
 ### Dependencies
 
@@ -35,8 +41,8 @@ Let's imagine we have this `config.php`:
 return [
     'logger' => [
         'loggerClass' => 'queasy\log\FileSystemLogger', // Logger class to be instantiated
-        'setErrorHandlers' => true, // This option say to set error and exception handlers
-        'minLevel' => 'debug', // Min message log level to put message into this logger output
+        'setErrorHandlers' => true, // This option says to set error and exception handlers
+        'minLevel' => 'debug', // Message's minimum acceptable log level
         'path' => 'debug.log' // Path to logger output file
     ]
 ];
