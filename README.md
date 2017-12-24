@@ -63,7 +63,7 @@ $config = new queasy\config\Config('config.php');
 Create logger instance:
 
 ```php
-$logger = new queasy\log\Logger::create($config->logger);
+$logger = queasy\log\Logger::create($config->logger);
 ```
 
 Output debug message:
