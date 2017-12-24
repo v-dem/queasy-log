@@ -110,7 +110,7 @@ class LoggerAggregate extends AbstractLogger
         $this->config = $config;
 
         // Weird way to detect if we are a top-level Logger in config
-        if (!$config['loggerClass']) {
+        if ($config->get('setErrorHandlers')) {
             $this->oldErrorHandler = set_error_handler(array($this, 'handleError'));
             $this->oldExceptionHandler = set_exception_handler(array($this, 'handleException'));
         }
