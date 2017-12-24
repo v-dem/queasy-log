@@ -15,7 +15,7 @@ use Psr\Log\LogLevel;
 /**
  * Console logger
  */
-class Console extends LoggerAggregate
+class ConsoleLogger extends Logger
 {
     const DEFAULT_MESSAGE_FORMAT = '[%5$s] %6$s %7$s';
 

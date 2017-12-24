@@ -20,7 +20,7 @@ use queasy\config\ConfigInterface;
 /**
  * Logger aggregator class
  */
-class LoggerAggregate extends AbstractLogger
+class Logger extends AbstractLogger
 {
     const DEFAULT_MIN_LEVEL = LogLevel::DEBUG;
     const DEFAULT_MAX_LEVEL = LogLevel::EMERGENCY;
@@ -38,6 +38,13 @@ class LoggerAggregate extends AbstractLogger
      *              7) context
      */
     const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [%4$s] [%5$s] %6$s %7$s';
+
+    public static function create(ConfigInterface $config)
+    {
+        $loggerClass = $config->get('loggerClass', 'queasy\log\Logger');
+
+        return new $loggerClass($config, true);
+    }
 
     /**
      * Translate log level word into an integer value.
@@ -105,12 +112,11 @@ class LoggerAggregate extends AbstractLogger
      *
      * @throws InvalidArgumentException When a subordinated logger class doesn't exist or doesn't implement Psr\Log\LoggerInterface
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(ConfigInterface $config, $setErrorHandlers = false)
     {
         $this->config = $config;
 
-        // Weird way to detect if we are a top-level Logger in config
-        if ($config->get('setErrorHandlers')) {
+        if ($setErrorHandlers) {
             $this->oldErrorHandler = set_error_handler(array($this, 'handleError'));
             $this->oldExceptionHandler = set_exception_handler(array($this, 'handleException'));
         }

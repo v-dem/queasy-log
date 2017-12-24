@@ -15,7 +15,7 @@ use queasy\config\ConfigInterface;
 /**
  * File system logger
  */
-class FileSystem extends LoggerAggregate
+class FileSystemLogger extends Logger
 {
     const DEFAULT_PATH = 'debug.log';
 
