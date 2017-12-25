@@ -1,4 +1,4 @@
-# [Queasy PHP Framework](https://github.com/v-dem/queasy-app/)
+# [Queasy PHP Framework](https://github.com/v-dem/queasy-app/) - Logger
 
 ## Package `v-dem/queasy-log`
 
