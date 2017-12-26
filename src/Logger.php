@@ -39,13 +39,14 @@ class Logger extends AbstractLogger
      */
     const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [%4$s] [%5$s] %6$s %7$s';
 
+/*
     public static function create(ConfigInterface $config)
     {
         $loggerClass = $config->get('loggerClass', 'queasy\log\Logger');
 
         return new $loggerClass($config, true);
     }
-
+*/
     /**
      * Translate log level word into an integer value.
      *
@@ -112,7 +113,7 @@ class Logger extends AbstractLogger
      *
      * @throws InvalidArgumentException When a subordinated logger class doesn't exist or doesn't implement Psr\Log\LoggerInterface
      */
-    public function __construct(ConfigInterface $config, $setErrorHandlers = false)
+    public function __construct(ConfigInterface $config, $setErrorHandlers = true)
     {
         $this->config = $config;
 
@@ -173,6 +174,7 @@ class Logger extends AbstractLogger
 
         $this->log($logLevel, $this->errorString($errNo, $errStr, $errFile, $errLine));
 
+        // TODO: Check if old handler is called automatically
         $oldHandler = $this->oldErrorHandler();
         if ($oldHandler) {
             return $oldHandler($errNo, $errStr, $errFile, $errLine);
@@ -194,6 +196,7 @@ class Logger extends AbstractLogger
             'exception' => $ex
         ));
 
+        // TODO: Check if old handler is called automatically
         $oldHandler = $this->oldExceptionHandler();
         if ($oldHandler) {
             return $oldHandler($ex);
@@ -246,7 +249,7 @@ class Logger extends AbstractLogger
                         throw InvalidArgumentException::interfaceNotImplemented($className, $interfaceName);
                     }
 
-                    $this->loggers[] = new $className($section);
+                    $this->loggers[] = new $className($section, false);
                 }
             }
         }
