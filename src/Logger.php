@@ -39,14 +39,22 @@ class Logger extends AbstractLogger
      */
     const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [%4$s] [%5$s] %6$s %7$s';
 
-/*
+    /**
+     * Create logger instance.
+     *
+     * Logger class can be specified in config using 'loggerClass' option, by default Logger class will be used
+     *
+     * @param ConfigInterface $config Logger config
+     *
+     * @return int Integer log level value
+     */
     public static function create(ConfigInterface $config)
     {
         $loggerClass = $config->get('loggerClass', 'queasy\log\Logger');
 
-        return new $loggerClass($config, true);
+        return new $loggerClass($config);
     }
-*/
+
     /**
      * Translate log level word into an integer value.
      *
