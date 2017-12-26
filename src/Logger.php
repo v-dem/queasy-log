@@ -42,7 +42,7 @@ class Logger extends AbstractLogger
     /**
      * Create logger instance.
      *
-     * Logger class can be specified in config using 'loggerClass' option, by default Logger class will be used
+     * Logger class can be specified in config using 'class' option, by default Logger class will be used
      *
      * @param ConfigInterface $config Logger config
      *
@@ -50,9 +50,9 @@ class Logger extends AbstractLogger
      */
     public static function create(ConfigInterface $config)
     {
-        $loggerClass = $config->get('loggerClass', 'queasy\log\Logger');
+        $class = $config->get('class', 'queasy\log\Logger');
 
-        return new $loggerClass($config);
+        return new $class($config);
     }
 
     /**
@@ -245,8 +245,8 @@ class Logger extends AbstractLogger
 
             foreach ($this->config() as $section) {
                 if (($section instanceof ConfigInterface)
-                        && isset($section->loggerClass)) {
-                    $className = $section->loggerClass;
+                        && isset($section->class)) {
+                    $className = $section->class;
                     if (!class_exists($className)) {
                         throw InvalidArgumentException::loggerNotExists($className);
                     }

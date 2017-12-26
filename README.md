@@ -12,6 +12,11 @@ Contains logger classes compatible with PSR-3 logger interface. Currenly file sy
 * Nested loggers support.
 * Output message format is fully configurable.
 
+#### Planned features
+
+* Add email logger.
+* Full support of message context.
+
 ### Requirements
 
 * PHP version 5.3 or higher
@@ -27,14 +32,13 @@ See our [Wiki page](https://github.com/v-dem/queasy-log/wiki).
 
 ### Usage
 
-Let's imagine we have this `config.php`:
+Let's imagine we have folowwing `config.php`:
 
 ```php
 <?php
 return [
     'logger' => [
-        'loggerClass' => 'queasy\log\FileSystemLogger', // Logger class to be instantiated
-        'setErrorHandlers' => true, // This option says to set error and exception handlers
+        'class' => 'queasy\log\FileSystemLogger', // Logger class to be instantiated
         'processName' => 'test', // Process name, to differentiate log messages from different sources
         'minLevel' => \Psr\Log\LogLevel::WARNING, // Message's minimum acceptable log level
         'path' => 'debug.log' // Path to logger output file
@@ -56,13 +60,13 @@ Create config instance:
 $config = new queasy\config\Config('config.php');
 ```
 
-Create logger instance (in this case no need in `loggerClass` option in config):
+Create logger instance (in this case `class` option can be omitted):
 
 ```php
 $logger = new queasy\log\FileSystemLogger($config);
 ```
 
-Another way to create logger instance (it will create an instance of `loggerClass`, by default `queasy\log\Logger` will be used):
+Another way to create logger instance (it will create an instance of `class`, by default `queasy\log\Logger` will be used):
 
 ```php
 $logger = queasy\log\Logger::create($config->logger);
