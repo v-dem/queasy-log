@@ -84,4 +84,14 @@ In `debug.log` you'll see something like this:
 
     2017-12-24 16:13:09.302334 EET test [] [] [DEBUG] Test warning message.
 
+> If you already have another config tool than `queasy\config` then you can use `queasy\config\Config` as just a proxy,
+> for example you can pass an options array to a Config constructor and pass Config instance to Logger constructor:
+
+```php
+$customConfig = get_my_custom_config(); // An array with option 'name' => 'value' pairs, may include nested arrays
+
+$logger = new queasy\log\FileSystemLogger(new queasy\config\Config($customConfig));
+```
+
+See [`v-dem/queasy-config` Wiki](https://github.com/v-dem/queasy-config/wiki) for more details.
 
