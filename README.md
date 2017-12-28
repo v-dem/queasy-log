@@ -66,7 +66,8 @@ Create logger instance (in this case `class` option can be omitted and will be i
 $logger = new queasy\log\FileSystemLogger($config->logger);
 ```
 
-Another way to create logger instance (it will create an instance of `$config->logger->class`, by default `queasy\log\Logger` will be used):
+Another way to create logger instance (it will create an instance of `$config->logger->class`, by default `queasy\log\Logger`
+as an aggregate logger will be used):
 
 ```php
 $logger = queasy\log\Logger::create($config->logger);
