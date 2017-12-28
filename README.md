@@ -63,7 +63,7 @@ $config = new queasy\config\Config('config.php');
 Create logger instance (in this case `class` option can be omitted):
 
 ```php
-$logger = new queasy\log\FileSystemLogger($config);
+$logger = new queasy\log\FileSystemLogger($config->logger);
 ```
 
 Another way to create logger instance (it will create an instance of `class`, by default `queasy\log\Logger` will be used):
