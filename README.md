@@ -96,3 +96,12 @@ $logger = new queasy\log\FileSystemLogger(new queasy\config\Config($customConfig
 
 See [`v-dem/queasy-config` Wiki](https://github.com/v-dem/queasy-config/wiki) for more details.
 
+#### Chain messages
+
+```php
+$logger
+    ->warning('going strange')
+    ->error('cannot connect to the database')
+    ->emergency('the website is down');
+```
+
