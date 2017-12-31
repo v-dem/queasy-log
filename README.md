@@ -2,7 +2,7 @@
 
 ## Package `v-dem/queasy-log`
 
-Contains logger classes compatible with PSR-3 logger interface. Currenly file system and console loggers are implemented.
+Contains logger classes compatible with PSR-3 logger interface. Currently file system and console loggers are implemented.
 
 ### Features
 
