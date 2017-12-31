@@ -83,7 +83,7 @@ $logger->warning('Test warning message.');
 
 In `debug.log` you'll see something like this:
 
-    2017-12-24 16:13:09.302334 EET test [] [] [DEBUG] Test warning message.
+    2017-12-24 16:13:09.302334 EET test [] [] [WARNING] Test warning message.
 
 > If you already have another config tool than `queasy\config` then you can use `queasy\config\Config` as just a proxy,
 > for example you can pass an options array to a Config constructor and pass Config instance to Logger constructor:
