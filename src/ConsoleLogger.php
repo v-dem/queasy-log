@@ -30,9 +30,8 @@ class ConsoleLogger extends Logger
     {
         parent::log($level, $message, $context);
 
-        $prepend = '';
         $append = '';
-
+        $prepend = '';
         if ($this->hasColorSupport()) {
             switch ($level) {
                 case LogLevel::INFO:

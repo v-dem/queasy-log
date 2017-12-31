@@ -32,7 +32,7 @@ See our [Wiki page](https://github.com/v-dem/queasy-log/wiki).
 
 ### Usage
 
-Let's imagine we have folowwing `config.php`:
+Let's imagine we have the following `config.php`:
 
 ```php
 <?php
