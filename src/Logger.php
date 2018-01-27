@@ -37,7 +37,7 @@ class Logger extends AbstractLogger
      *              6) message,
      *              7) context
      */
-    const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [%4$s] [%5$s] %6$s %7$s';
+    const DEFAULT_MESSAGE_FORMAT = '%1$s %2$s [%3$s] [%4$s] [%5$s] %6$s%7$s';
 
     /**
      * Create logger instance.
@@ -150,49 +150,6 @@ class Logger extends AbstractLogger
         return $this;
     }
 
-    /**
-     * Errors handler.
-     *
-     * @param int $errNo Error code
-     * @param string $errStr Error message
-     * @param string|null $errFile Error file
-     * @param int|null $errLine Error line
-     *
-     * @return bool Indicates whether error was handled or not
-     */
-    public function handleError($errNo, $errStr, $errFile = null, $errLine = null)
-    {
-        switch ($errNo) {
-            case E_NOTICE:
-            case E_USER_NOTICE:
-            case E_DEPRECATED:
-            case E_USER_DEPRECATED:
-            case E_STRICT:
-                $logLevel = LogLevel::NOTICE;
-                break;
-
-            case E_WARNING:
-            case E_CORE_WARNING:
-            case E_COMPILE_WARNING:
-            case E_USER_WARNING:
-                $logLevel = LogLevel::WARNING;
-                break;
-
-            default:
-                $logLevel = LogLevel::ERROR;
-        }
-
-        $this->log($logLevel, $this->errorString($errNo, $errStr, $errFile, $errLine));
-
-        // TODO: Check if old handler is called automatically
-        $oldHandler = $this->oldErrorHandler();
-        if ($oldHandler) {
-            return $oldHandler($errNo, $errStr, $errFile, $errLine);
-        }
-
-        return false;
-    }
-
     public function emergency($message, array $context = array())
     {
         parent::emergency($message, $context);
@@ -250,6 +207,49 @@ class Logger extends AbstractLogger
     }
 
     /**
+     * Errors handler.
+     *
+     * @param int $errNo Error code
+     * @param string $errStr Error message
+     * @param string|null $errFile Error file
+     * @param int|null $errLine Error line
+     *
+     * @return bool Indicates whether error was handled or not
+     */
+    public function handleError($errNo, $errStr, $errFile = null, $errLine = null)
+    {
+        switch ($errNo) {
+            case E_NOTICE:
+            case E_USER_NOTICE:
+            case E_DEPRECATED:
+            case E_USER_DEPRECATED:
+            case E_STRICT:
+                $logLevel = LogLevel::NOTICE;
+                break;
+
+            case E_WARNING:
+            case E_CORE_WARNING:
+            case E_COMPILE_WARNING:
+            case E_USER_WARNING:
+                $logLevel = LogLevel::WARNING;
+                break;
+
+            default:
+                $logLevel = LogLevel::ERROR;
+        }
+
+        $this->log($logLevel, $this->errorString($errNo, $errStr, $errFile, $errLine));
+
+        // TODO: Check if old handler is called automatically
+        $oldHandler = $this->oldErrorHandler();
+        if ($oldHandler) {
+            return $oldHandler($errNo, $errStr, $errFile, $errLine);
+        }
+
+        return false;
+    }
+
+    /**
      * Exceptions handler.
      *
      * @param Throwable|Exception $ex Exception instance
@@ -258,7 +258,7 @@ class Logger extends AbstractLogger
      */
     public function handleException($ex)
     {
-        $this->error('Uncaught', array(
+        $this->error('Uncaught ', array(
             'exception' => $ex
         ));
 
@@ -441,28 +441,29 @@ class Logger extends AbstractLogger
      * Get message string.
      *
      * @param string $message Source message
+     * @param array $context Log message context
      *
      * @return string Message
      */
-    protected function messageString($message)
+    protected function messageString($message, array $context = null)
     {
-        return (is_object($message) || is_array($message))
-            ? print_r($message, true)
-            : $message;
-    }
+        if (is_object($message) || is_array($message)) {
+            $message = print_r($message, true);
+        } elseif (!is_null($context)) {
+            foreach ($context as $key => $value) {
+                if (false !== strpos($message, '{' . $key . '}')) {
+                    $message = str_replace('{' . $key . '}', $value, $message);
 
-    /**
-     * Build exception string.
-     *
-     * @param Throwable|Exception $ex Throwable or Exception instance
-     *
-     * @return string Exception string
-     */
-    protected function exceptionString($ex)
-    {
-        return get_class($ex) . ': ' . $ex->getMessage() . ' in ' . $ex->getFile() . '(' . $ex->getLine() . ')' . PHP_EOL
-            . 'Stack trace:' . PHP_EOL
-            . $ex->getTraceAsString() . PHP_EOL;
+                    unset($context[$key]);
+                }
+            }
+
+            unset($context['exception']);
+
+            $message = $message . (count($context)? PHP_EOL . 'Context: ' . print_r($context, true): '');
+        }
+
+        return $message;
     }
 
     /**
@@ -473,7 +474,7 @@ class Logger extends AbstractLogger
      * @param string|null $errFile Error file
      * @param int|null $errLine Error line
      *
-     * @return string Exception string
+     * @return string Error string
      */
     protected function errorString($errNo, $errStr, $errFile = null, $errLine = null)
     {
@@ -483,7 +484,7 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * Build context string.
+     * Build exception context string.
      *
      * @param array|null $context Log message context
      *
@@ -491,7 +492,7 @@ class Logger extends AbstractLogger
      *
      * @throws \InvalidArgumentException When 'exception' key in $context doesn't contain a Throwable or Exception instance
      */
-    protected function contextString(array $context = null)
+    protected function exceptionString(array $context = null)
     {
         if (is_null($context)) {
             return '';
@@ -502,17 +503,24 @@ class Logger extends AbstractLogger
         if (isset($context['exception'])) {
             $ex = $context['exception'];
 
-            unset($context['exception']);
-
             if (interface_exists('\Throwable') && is_subclass_of($ex, '\Throwable')
                     || ($ex instanceof Exception)) {
-                $result .= $this->exceptionString($ex);
+                $result .= sprintf('%s: %s in %s(%s)%sStack trace:%s%s%s',
+                    get_class($ex),
+                    $ex->getMessage(),
+                    $ex->getFile(),
+                    $ex->getLine(),
+                    PHP_EOL,
+                    PHP_EOL,
+                    $ex->getTraceAsString(),
+                    PHP_EOL
+                );
             } else {
                 throw InvalidArgumentException::invalidContextException();
             }
         }
 
-        return (count($context)? PHP_EOL . print_r($context, true): '') . $result;
+        return $result;
     }
 
     /**
@@ -533,8 +541,8 @@ class Logger extends AbstractLogger
             $this->sessionIdString(),
             $this->ipAddressString(),
             $this->logLevelString($level),
-            $this->messageString($message),
-            $this->contextString($context)
+            $this->messageString($message, $context),
+            $this->exceptionString($context)
         ));
     }
 }
