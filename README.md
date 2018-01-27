@@ -136,3 +136,10 @@ return [
 ];
 ```
 
+Usage:
+```php
+$config = new queasy\config\Config('config.php');
+$logger = new queasy\log\Logger($config);
+$logger->info('Hello, world!');
+```
+
