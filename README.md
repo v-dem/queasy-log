@@ -101,7 +101,7 @@ $logger = new queasy\log\FileSystemLogger(new queasy\config\Config($customConfig
 
 See [`v-dem/queasy-config` Wiki](https://github.com/v-dem/queasy-config/wiki) for more details.
 
-#### Chain messages
+#### Chain log messages
 
 ```php
 $logger
@@ -119,12 +119,10 @@ return [
     [
         'class' => queasy\log\FileSystemLogger::class,
         'path' => 'debug.full.log',
-        'minLevel' => Psr\Log\LogLevel::DEBUG,
-        [
+        'minLevel' => Psr\Log\LogLevel::DEBUG, [
             'class' => queasy\log\ConsoleLogger::class,
             'minLevel' => Psr\Log\LogLevel::INFO
-        ],
-        [
+        ], [
             'class' => queasy\log\SimpleMailLogger::class,
             'minLevel' => Psr\Log\LogLevel::ALERT,
             'mailTo' => 'john.doe@example.com',
