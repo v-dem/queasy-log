@@ -26,8 +26,6 @@ class SimpleMailLogger extends Logger
      */
     public function log($level, $message, array $context = array())
     {
-        parent::log($level, $message, $context);
-
         $preparedMessage = $this->prepareMessage($level, $message, $context) . PHP_EOL;
 
         $additionalHeaders = '';
@@ -36,6 +34,8 @@ class SimpleMailLogger extends Logger
         }
 
         mail($this->mailTo(), $this->subject(), $preparedMessage, $additionalHeaders);
+
+        return parent::log($level, $message, $context);
     }
 
     /**

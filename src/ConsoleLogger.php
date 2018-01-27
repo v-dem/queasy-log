@@ -28,8 +28,6 @@ class ConsoleLogger extends Logger
      */
     public function log($level, $message, array $context = array())
     {
-        parent::log($level, $message, $context);
-
         $append = '';
         $prepend = '';
         if ($this->hasColorSupport()) {
@@ -61,6 +59,8 @@ class ConsoleLogger extends Logger
         $preparedMessage = $prepend . $this->prepareMessage($level, $message, $context) . $append;
 
         echo $preparedMessage . PHP_EOL;
+
+        return parent::log($level, $message, $context);
     }
 
     /**

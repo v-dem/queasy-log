@@ -146,6 +146,8 @@ class Logger extends AbstractLogger
                 $logger->log($level, $message, $context);
             }
         }
+
+        return $this;
     }
 
     /**
@@ -211,7 +213,6 @@ class Logger extends AbstractLogger
 
         return $this;
     }
-
 
     public function error($message, array $context = array())
     {

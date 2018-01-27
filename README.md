@@ -3,6 +3,12 @@
 ## Package `v-dem/queasy-log`
 
 Contains logger classes compatible with PSR-3 logger interface. Currently file system and console loggers are implemented.
+This package inclide these types of logging:
+
+* Logger (base class, can be used as a container for other loggers)
+* FileSystemLogger
+* ConsoleLogger (supports ANSI color codes)
+* SimpleMailLogger (encapsulates `mail()` function)
 
 ### Features
 
@@ -10,11 +16,10 @@ Contains logger classes compatible with PSR-3 logger interface. Currently file s
 * Easy to use.
 * Easy to extend.
 * Nested loggers support.
-* Output message format is fully configurable.
+* Configurable output message format.
 
 #### Planned features
 
-* Add email logger.
 * Full support of message context.
 
 ### Requirements

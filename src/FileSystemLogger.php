@@ -26,11 +26,11 @@ class FileSystemLogger extends Logger
      */
     public function log($level, $message, array $context = array())
     {
-        parent::log($level, $message, $context);
-
         $preparedMessage = $this->prepareMessage($level, $message, $context);
 
         file_put_contents($this->path(), $preparedMessage . PHP_EOL, FILE_APPEND | LOCK_EX);
+
+        return parent::log($level, $message, $context);
     }
 
     /**
