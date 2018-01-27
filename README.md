@@ -3,7 +3,7 @@
 ## Package `v-dem/queasy-log`
 
 Contains logger classes compatible with PSR-3 logger interface. Currently file system and console loggers are implemented.
-This package inclide these types of logging:
+This package includes these types of logging:
 
 * Logger (base class, can be used as a container for other loggers)
 * FileSystemLogger
@@ -43,9 +43,9 @@ Let's imagine we have the following `config.php`:
 <?php
 return [
     'logger' => [
-        'class' => 'queasy\log\FileSystemLogger', // Logger class to be instantiated
+        'class' => queasy\log\FileSystemLogger::class, // Logger class to be instantiated
         'processName' => 'test', // Process name, to differentiate log messages from different sources
-        'minLevel' => \Psr\Log\LogLevel::WARNING, // Message's minimum acceptable log level
+        'minLevel' => Psr\Log\LogLevel::WARNING, // Message's minimum acceptable log level
         'path' => 'debug.log' // Path to logger output file
     ]
 ];
@@ -108,5 +108,33 @@ $logger
     ->warning('going strange')
     ->error('cannot connect to the database')
     ->emergency('the website is down');
+```
+
+#### Using composite/nested loggers
+
+`config.php`:
+```php
+<?php
+return [
+    [
+        'class' => queasy\log\FileSystemLogger::class,
+        'path' => 'debug.full.log',
+        'minLevel' => Psr\Log\LogLevel::DEBUG,
+        [
+            'class' => queasy\log\ConsoleLogger::class,
+            'minLevel' => Psr\Log\LogLevel::INFO
+        ],
+        [
+            'class' => queasy\log\SimpleMailLogger::class,
+            'minLevel' => Psr\Log\LogLevel::ALERT,
+            'mailTo' => 'john.doe@example.com',
+            'subject' => 'Website Alert'
+        ]
+    ], [
+        'class' => queasy\log\FileSystemLogger::class,
+        'path' => 'debug.log',
+        'minLevel' => Psr\Log\LogLevel::INFO
+    ]
+];
 ```
 
