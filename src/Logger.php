@@ -121,7 +121,7 @@ class Logger extends AbstractLogger
      *
      * @throws InvalidArgumentException When a subordinated logger class doesn't exist or doesn't implement Psr\Log\LoggerInterface
      */
-    public function __construct(ConfigInterface $config, $setErrorHandlers = true)
+    public function __construct(ConfigInterface $config = null, $setErrorHandlers = true)
     {
         $this->config = $config;
 

@@ -3,7 +3,7 @@
     "description": "Logger classes (currently supports file system and console logging), part of Queasy PHP Framework",
     "homepage": "https://github.com/v-dem/queasy-log/",
     "keywords": ["log", "logger", "logging", "php", "psr-3"],
-    "license": "LGPL-3.0",
+    "license": "LGPL-3.0-only",
     "version": "1.0.1",
     "minimum-stability": "dev",
     "authors": [

@@ -10,8 +10,6 @@
 
 namespace queasy\log;
 
-use queasy\config\ConfigInterface;
-
 /**
  * File system logger
  */
@@ -38,7 +36,7 @@ class FileSystemLogger extends Logger
     /**
      * Get log file path
      *
-     * @return Log file path
+     * @return string Log file path
      */
     protected function path()
     {
