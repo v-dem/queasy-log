@@ -258,7 +258,7 @@ class Logger extends AbstractLogger
      */
     public function handleException($ex)
     {
-        $this->error('Uncaught ', array(
+        $this->error('UNCAUGHT EXCEPTION.', array(
             'exception' => $ex
         ));
 
@@ -505,7 +505,8 @@ class Logger extends AbstractLogger
 
             if (interface_exists('\Throwable') && is_subclass_of($ex, '\Throwable')
                     || ($ex instanceof Exception)) {
-                $result .= sprintf('%s: %s in %s(%s)%sStack trace:%s%s%s',
+                $result .= sprintf('%s%s: %s in %s(%s)%sStack trace:%s%s%s',
+                    PHP_EOL,
                     get_class($ex),
                     $ex->getMessage(),
                     $ex->getFile(),
