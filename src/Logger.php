@@ -438,7 +438,7 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * Get message string.
+     * Build message and context string.
      *
      * @param string $message Source message
      * @param array $context Log message context
@@ -484,7 +484,7 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * Build exception context string.
+     * Build exception string.
      *
      * @param array|null $context Log message context
      *
@@ -532,7 +532,7 @@ class Logger extends AbstractLogger
      *
      * @return string Log message string
      */
-    protected function prepareMessage($level, $message, array $context = array())
+    protected function prepareMessage($level, $message, array $context = null)
     {
         return trim(sprintf(
             $this->messageFormat(),
