@@ -18,10 +18,6 @@ This package includes these types of logging:
 * Nested loggers support.
 * Configurable output message format.
 
-#### Planned features
-
-* Full support of message context.
-
 ### Requirements
 
 * PHP version 5.3 or higher
@@ -119,7 +115,8 @@ return [
     [
         'class' => queasy\log\FileSystemLogger::class,
         'path' => 'debug.full.log',
-        'minLevel' => Psr\Log\LogLevel::DEBUG, [
+        'minLevel' => Psr\Log\LogLevel::DEBUG,
+        [
             'class' => queasy\log\ConsoleLogger::class,
             'minLevel' => Psr\Log\LogLevel::INFO
         ], [
