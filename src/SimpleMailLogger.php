@@ -33,6 +33,11 @@ class SimpleMailLogger extends Logger
             $additionalHeaders .= sprintf("From: %s\r\n", $this->mailFrom());
         }
 
+        $configHeaders = $this->config()->get('headers', array());
+        foreach ($configHeaders as $header) {
+            $additionalHeaders .= sprintf("%s\r\n", $header);
+        }
+
         mail($this->mailTo(), $this->subject(), $preparedMessage, $additionalHeaders);
 
         return parent::log($level, $message, $context);
