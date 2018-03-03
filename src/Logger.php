@@ -15,6 +15,7 @@ use Exception;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
+use queasy\config\Config;
 use queasy\config\ConfigInterface;
 
 /**
@@ -325,6 +326,10 @@ class Logger extends AbstractLogger
 
     protected function config()
     {
+        if (is_null($this->config)) {
+            return new Config(array());
+        }
+
         return $this->config;
     }
 
