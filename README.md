@@ -74,6 +74,9 @@ as an aggregate logger will be used):
 $logger = queasy\log\Logger::create($config->logger);
 ```
 
+> `FileSystemLogger` and `ConsoleLogger` have default settings and can be used without config. Default log file path for
+> `FileSystemLogger` is `debug.log`, default min log level is `Psr\Log\LogLevel::DEBUG` and max is `LogLevel::EMERGENCY`.
+
 #### Writing messages to log
 
 Output warning message:
