@@ -58,7 +58,7 @@ class ConsoleLogger extends Logger
 
         $preparedMessage = $prepend . $this->prepareMessage($level, $message, $context) . $append;
 
-        echo $preparedMessage . PHP_EOL;
+        file_put_contents('php://stderr', $preparedMessage . PHP_EOL);
 
         return parent::log($level, $message, $context);
     }
