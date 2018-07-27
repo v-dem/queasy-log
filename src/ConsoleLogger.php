@@ -17,7 +17,7 @@ use Psr\Log\LogLevel;
  */
 class ConsoleLogger extends Logger
 {
-    const DEFAULT_MESSAGE_FORMAT = '[%5$s] %6$s%7$s';
+    const DEFAULT_MESSAGE_FORMAT = '%5$s %6$s%7$s';
 
     /**
      * Console log method.
@@ -27,6 +27,22 @@ class ConsoleLogger extends Logger
      * @param array|null $context Context
      */
     public function log($level, $message, array $context = array())
+    {
+        $preparedMessage = $this->prepareMessage($level, $message, $context);
+
+        file_put_contents('php://stderr', $preparedMessage . PHP_EOL);
+
+        return parent::log($level, $message, $context);
+    }
+
+    /**
+     * Get log level string.
+     *
+     * @param string $level Source log level
+     *
+     * @return string Log level
+     */
+    protected function logLevelString($level)
     {
         $append = '';
         $prepend = '';
@@ -56,11 +72,7 @@ class ConsoleLogger extends Logger
             }
         }
 
-        $preparedMessage = $prepend . $this->prepareMessage($level, $message, $context) . $append;
-
-        file_put_contents('php://stderr', $preparedMessage . PHP_EOL);
-
-        return parent::log($level, $message, $context);
+        return $prepend . '[' . strtoupper($level) . ']' . $append;
     }
 
     /**
