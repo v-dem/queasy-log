@@ -17,12 +17,15 @@ use Psr\Log\LogLevel;
 
 use queasy\config\Config;
 use queasy\config\ConfigInterface;
+use queasy\config\ConfigAwareTrait;
 
 /**
  * Logger aggregator class
  */
 class Logger extends AbstractLogger
 {
+    use ConfigAwareTrait;
+
     const DEFAULT_MIN_LEVEL = LogLevel::DEBUG;
     const DEFAULT_MAX_LEVEL = LogLevel::EMERGENCY;
 
@@ -96,11 +99,6 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * @var ConfigInterface Logger configuration instance
-     */
-    private $config;
-
-    /**
      * @var array Subordinated loggers
      */
     private $loggers;
@@ -124,7 +122,7 @@ class Logger extends AbstractLogger
      */
     public function __construct(ConfigInterface $config = null, $setErrorHandlers = true)
     {
-        $this->config = $config;
+        $this->setConfig($config);
 
         if ($setErrorHandlers) {
             $this->oldErrorHandler = set_error_handler(array($this, 'handleError'));
@@ -327,7 +325,7 @@ class Logger extends AbstractLogger
     protected function config()
     {
         if (is_null($this->config)) {
-            return new Config(array());
+            $this->setConfig(new Config(array()));
         }
 
         return $this->config;
