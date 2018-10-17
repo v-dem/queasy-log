@@ -54,7 +54,7 @@ class Logger extends AbstractLogger
      */
     public static function create(ConfigInterface $config)
     {
-        $class = $config->get('class', 'queasy\log\Logger');
+        $class = $config('class', 'queasy\log\Logger');
 
         return new $class($config);
     }
@@ -338,7 +338,7 @@ class Logger extends AbstractLogger
      */
     protected function minLevel()
     {
-        return $this->config()->get('minLevel', static::DEFAULT_MIN_LEVEL);
+        return $this->config()('minLevel', static::DEFAULT_MIN_LEVEL);
     }
 
     /**
@@ -348,7 +348,7 @@ class Logger extends AbstractLogger
      */
     protected function maxLevel()
     {
-        return $this->config()->get('maxLevel', static::DEFAULT_MAX_LEVEL);
+        return $this->config()('maxLevel', static::DEFAULT_MAX_LEVEL);
     }
 
     /**
@@ -368,7 +368,7 @@ class Logger extends AbstractLogger
      */
     protected function timeFormat()
     {
-        return $this->config()->get('timeFormat', static::DEFAULT_TIME_FORMAT);
+        return $this->config()('timeFormat', static::DEFAULT_TIME_FORMAT);
     }
 
     /**
@@ -378,7 +378,7 @@ class Logger extends AbstractLogger
      */
     protected function messageFormat()
     {
-        return $this->config()->get('messageFormat', static::DEFAULT_MESSAGE_FORMAT);
+        return $this->config()('messageFormat', static::DEFAULT_MESSAGE_FORMAT);
     }
 
     /**

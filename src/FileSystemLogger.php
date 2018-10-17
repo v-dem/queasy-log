@@ -40,7 +40,7 @@ class FileSystemLogger extends Logger
      */
     protected function path()
     {
-        return $this->config()->get('path', static::DEFAULT_PATH);
+        return $this->config()('path', static::DEFAULT_PATH);
     }
 }
 
