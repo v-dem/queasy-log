@@ -17,15 +17,12 @@ use Psr\Log\LogLevel;
 
 use queasy\config\Config;
 use queasy\config\ConfigInterface;
-use queasy\config\ConfigAwareTrait;
 
 /**
  * Logger aggregator class
  */
 class Logger extends AbstractLogger
 {
-    use ConfigAwareTrait;
-
     const DEFAULT_MIN_LEVEL = LogLevel::DEBUG;
     const DEFAULT_MAX_LEVEL = LogLevel::EMERGENCY;
 
@@ -114,13 +111,20 @@ class Logger extends AbstractLogger
     private $oldExceptionHandler;
 
     /**
+     * The config instance.
+     *
+     * @var ConfigInterface
+     */
+    protected $config;
+
+    /**
      * Constructor.
      *
-     * @param ConfigInterface $config Logger configuration
+     * @param array|ConfigInterface $config Logger configuration
      *
      * @throws InvalidArgumentException When a subordinated logger class doesn't exist or doesn't implement Psr\Log\LoggerInterface
      */
-    public function __construct(ConfigInterface $config = null, $setErrorHandlers = true)
+    public function __construct($config = null, $setErrorHandlers = true)
     {
         $this->setConfig($config);
 
@@ -268,6 +272,18 @@ class Logger extends AbstractLogger
         }
 
         return false;
+    }
+
+    /**
+     * Sets a config.
+     *
+     * @param array|ConfigInterface $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = ($config instanceof ConfigInterface)
+            ? $config
+            : new Config($config);
     }
 
     /**
