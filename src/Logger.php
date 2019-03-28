@@ -535,6 +535,12 @@ class Logger extends AbstractLogger
                     $ex->getTraceAsString(),
                     PHP_EOL
                 );
+
+                $previous = $ex->getPrevious();
+                if (is_object($previous)) {
+                    $result .= '---' . PHP_EOL;
+                    $result .= $this->exceptionString(array('exception' => $previous));
+                }
             } else {
                 throw InvalidArgumentException::invalidContextException();
             }
