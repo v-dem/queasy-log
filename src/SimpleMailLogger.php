@@ -15,6 +15,7 @@ namespace queasy\log;
  */
 class SimpleMailLogger extends Logger
 {
+    const DEFAULT_MAIL_TO = 'admin@example.com';
     const DEFAULT_SUBJECT = 'Log message';
 
     /**
@@ -60,7 +61,7 @@ class SimpleMailLogger extends Logger
      */
     protected function mailTo()
     {
-        return $this->config()('mailTo');
+        return $this->config()('mailTo', static::DEFAULT_MAIL_TO);
     }
 
     /**
