@@ -18,8 +18,8 @@
         "v-dem/queasy-config": "dev-master"
     },
     "require-dev": {
-        "php": ">=5.6.0|>=7.0.0",
-        "phpunit/phpunit": "~5.7"
+        "php": ">=7.1.0",
+        "phpunit/phpunit": "~7"
     },
     "autoload": {
         "psr-4": {
