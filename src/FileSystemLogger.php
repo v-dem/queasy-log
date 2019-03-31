@@ -28,7 +28,9 @@ class FileSystemLogger extends Logger
     {
         $preparedMessage = $this->prepareMessage($level, $message, $context);
 
-        file_put_contents($this->path(), $preparedMessage . PHP_EOL, FILE_APPEND | LOCK_EX);
+        $path = isset($this->config()->timeLabel)? sprintf($this->path(), date($this->config()->timeLabel)): $this->path();
+
+        file_put_contents($path, $preparedMessage . PHP_EOL, FILE_APPEND | LOCK_EX);
 
         return parent::log($level, $message, $context);
     }
