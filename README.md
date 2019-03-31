@@ -143,3 +143,18 @@ $logger = new queasy\log\Logger($config);
 $logger->info('Hello, world!');
 ```
 
+#### Using date/time in log file name (note "%s" there, it will be replaced by current date and/or time formatted as described in `timeLabel`)
+
+`config.php`:
+```php
+<?php
+return [
+    [
+        'class' => queasy\log\FileSystemLogger::class,
+        'path' => 'debug-full.%s.log',
+        'timeLabel' => 'Y-m-d',
+        'minLevel' => Psr\Log\LogLevel::DEBUG
+    ]
+];
+```
+
