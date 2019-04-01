@@ -88,7 +88,7 @@ class ConsoleLogger extends Logger
                     || ('on' === strtolower(getenv('ConEmuANSI')))
                     || ('xterm' === strtolower(getenv('TERM')))))
             || (function_exists('posix_isatty')
-                && @posix_isatty(STDOUT));
+                && @posix_isatty(STDERR));
     }
 }
 
