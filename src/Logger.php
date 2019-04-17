@@ -42,7 +42,7 @@ class Logger extends AbstractLogger
      *
      * Logger class can be specified in config using 'class' option, by default Logger class will be used
      *
-     * @param ConfigInterface $config Logger config
+     * @param array|queasy\config\ConfigInterface $config Logger config
      *
      * @return int Integer log level value
      */
@@ -117,7 +117,7 @@ class Logger extends AbstractLogger
     /**
      * Constructor.
      *
-     * @param array|ConfigInterface $config Logger configuration
+     * @param array|queasy\config\ConfigInterface $config Logger configuration
      *
      * @throws InvalidArgumentException When a subordinated logger class doesn't exist or doesn't implement Psr\Log\LoggerInterface
      */
@@ -274,7 +274,7 @@ class Logger extends AbstractLogger
     /**
      * Sets a config.
      *
-     * @param array|ConfigInterface $config
+     * @param array|queasy\config\ConfigInterface $config
      */
     public function setConfig($config)
     {
