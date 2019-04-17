@@ -320,10 +320,13 @@ class Logger extends AbstractLogger
         if (!$this->loggers) {
             $this->loggers = array();
 
-            foreach ($this->config() as $section) {
-                if ((is_array($section) || ('queasy\\config\\ConfigInterface' === get_class($section)))
+            foreach ($this->config() as $className => $section) {
+                if ((is_array($section) || is_object($section) && ('queasy\\config\\ConfigInterface' === get_class($section)))
                         && isset($section['class'])) {
-                    $className = $section['class'];
+                    if (is_int($className)) {
+                        $className = $section['class'];
+                    }
+
                     if (!class_exists($className)) {
                         throw InvalidArgumentException::loggerNotExists($className);
                     }
