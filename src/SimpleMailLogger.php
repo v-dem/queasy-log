@@ -34,7 +34,7 @@ class SimpleMailLogger extends Logger
             $additionalHeaders .= sprintf("From: %s\r\n", $this->mailFrom());
         }
 
-        $configHeaders = $this->config()('headers', array());
+        $configHeaders = isset($this->config['headers'])? $this->config['headers']: array();
         foreach ($configHeaders as $header) {
             $additionalHeaders .= sprintf("%s\r\n", $header);
         }
@@ -51,7 +51,7 @@ class SimpleMailLogger extends Logger
      */
     protected function mailFrom()
     {
-        return $this->config()('mailFrom', null);
+        return isset($this->config['mailFrom'])? $this->config['mailFrom']: null;
     }
 
     /**
@@ -61,7 +61,7 @@ class SimpleMailLogger extends Logger
      */
     protected function mailTo()
     {
-        return $this->config()('mailTo', static::DEFAULT_MAIL_TO);
+        return isset($this->config['mailTo'])? $this->config['mailTo']: static::DEFAULT_MAIL_TO;
     }
 
     /**
@@ -71,7 +71,7 @@ class SimpleMailLogger extends Logger
      */
     protected function subject()
     {
-        return $this->config()('subject', static::DEFAULT_SUBJECT);
+        return isset($this->config['subject'])? $this->config['subject']: static::DEFAULT_SUBJECT;
     }
 }
 

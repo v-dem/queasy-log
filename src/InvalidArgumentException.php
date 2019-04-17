@@ -27,9 +27,14 @@ class InvalidArgumentException extends PsrLogInvalidArgumentException
         return new InvalidArgumentException(sprintf('Logger class "%s" does not implement "%s".', $className, $interfaceName));
     }
 
-    public static function invalidContextException()
+    public static function invalidContext()
     {
         return new InvalidArgumentException('Value of \'exception\' key in log message context does not contain valid Throwable or Exception instance.');
+    }
+
+    public static function unknownField($field)
+    {
+        return new InvalidArgumentException(sprintf('Unknown field "%s"', $field));
     }
 }
 

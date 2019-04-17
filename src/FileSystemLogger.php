@@ -28,7 +28,7 @@ class FileSystemLogger extends Logger
     {
         $preparedMessage = $this->prepareMessage($level, $message, $context);
 
-        $path = isset($this->config()->timeLabel)? sprintf($this->path(), date($this->config()->timeLabel)): $this->path();
+        $path = isset($this->config['timeLabel'])? sprintf($this->path(), date($this->config['timeLabel'])): $this->path();
 
         file_put_contents($path, $preparedMessage . PHP_EOL, FILE_APPEND | LOCK_EX);
 
@@ -42,7 +42,7 @@ class FileSystemLogger extends Logger
      */
     protected function path()
     {
-        return $this->config()->get('path', static::DEFAULT_PATH);
+        return isset($this->config['path'])? $this->config['path']: static::DEFAULT_PATH;
     }
 }
 

@@ -15,9 +15,6 @@ use Exception;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
-use queasy\config\Config;
-use queasy\config\ConfigInterface;
-
 /**
  * Logger aggregator class
  */
@@ -49,7 +46,7 @@ class Logger extends AbstractLogger
      *
      * @return int Integer log level value
      */
-    public static function create(ConfigInterface $config)
+    public static function create($config)
     {
         $class = $config('class', 'queasy\log\Logger');
 
@@ -115,7 +112,7 @@ class Logger extends AbstractLogger
      *
      * @var ConfigInterface
      */
-    protected $config;
+    private $config;
 
     /**
      * Constructor.
@@ -281,9 +278,16 @@ class Logger extends AbstractLogger
      */
     public function setConfig($config)
     {
-        $this->config = ($config instanceof ConfigInterface)
-            ? $config
-            : new Config($config);
+        $this->config = $config;
+    }
+
+    public function __get($field)
+    {
+        if ('config' === $field) {
+            return $this->config;
+        } else {
+            InvalidArgumentException::unknownField($field);
+        }
     }
 
     /**
@@ -317,9 +321,9 @@ class Logger extends AbstractLogger
             $this->loggers = array();
 
             foreach ($this->config() as $section) {
-                if (($section instanceof ConfigInterface)
-                        && isset($section->class)) {
-                    $className = $section->class;
+                if (is_array($section)
+                        && isset($section['class'])) {
+                    $className = $section['class'];
                     if (!class_exists($className)) {
                         throw InvalidArgumentException::loggerNotExists($className);
                     }
@@ -341,7 +345,7 @@ class Logger extends AbstractLogger
     protected function config()
     {
         if (is_null($this->config)) {
-            $this->setConfig(new Config(array()));
+            $this->setConfig(array());
         }
 
         return $this->config;
@@ -354,7 +358,7 @@ class Logger extends AbstractLogger
      */
     protected function minLevel()
     {
-        return $this->config()->get('minLevel', static::DEFAULT_MIN_LEVEL);
+        return isset($this->config['minLevel'])? $this->config['minLevel']: static::DEFAULT_MIN_LEVEL;
     }
 
     /**
@@ -364,7 +368,7 @@ class Logger extends AbstractLogger
      */
     protected function maxLevel()
     {
-        return $this->config()->get('maxLevel', static::DEFAULT_MAX_LEVEL);
+        return isset($this->config['maxLevel'])? $this->config['maxLevel']: static::DEFAULT_MAX_LEVEL;
     }
 
     /**
@@ -374,7 +378,7 @@ class Logger extends AbstractLogger
      */
     protected function processName()
     {
-        return $this->config()->processName;
+        return isset($this->config['processName'])? $this->config['processName']: null;
     }
 
     /**
@@ -384,7 +388,7 @@ class Logger extends AbstractLogger
      */
     protected function timeFormat()
     {
-        return $this->config()->get('timeFormat', static::DEFAULT_TIME_FORMAT);
+        return isset($this->config['timeFormat'])? $this->config['timeFormat']: static::DEFAULT_TIME_FORMAT;
     }
 
     /**
@@ -394,7 +398,7 @@ class Logger extends AbstractLogger
      */
     protected function messageFormat()
     {
-        return $this->config()->get('messageFormat', static::DEFAULT_MESSAGE_FORMAT);
+        return isset($this->config['messageFormat'])? $this->config['messageFormat']: static::DEFAULT_MESSAGE_FORMAT;
     }
 
     /**
@@ -542,7 +546,7 @@ class Logger extends AbstractLogger
                     $result .= $this->exceptionString(array('exception' => $previous));
                 }
             } else {
-                throw InvalidArgumentException::invalidContextException();
+                throw InvalidArgumentException::invalidContext();
             }
         }
 
