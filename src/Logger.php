@@ -321,7 +321,7 @@ class Logger extends AbstractLogger
             $this->loggers = array();
 
             foreach ($this->config() as $section) {
-                if (is_array($section)
+                if ((is_array($section) || ('queasy\\config\\ConfigInterface' === get_class($section)))
                         && isset($section['class'])) {
                     $className = $section['class'];
                     if (!class_exists($className)) {
