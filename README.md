@@ -37,7 +37,8 @@ Let's imagine we have the following `config.php`:
 ```php
 <?php
 return [
-    queasy\log\FileSystemLogger::class => [
+    'logger' => [
+        'class' => queasy\log\FileSystemLogger, // Logger class
         'processName' => 'test', // Process name, to differentiate log messages from different sources
         'minLevel' => Psr\Log\LogLevel::WARNING, // Message's minimum acceptable log level
         'path' => 'debug.log' // Path to logger output file
@@ -108,19 +109,21 @@ $logger
 ```php
 <?php
 return [
-    queasy\log\FileSystemLogger::class => [
+    [
+        'class' => queasy\log\FileSystemLogger::class,
         'path' => 'debug.full.log',
         'minLevel' => Psr\Log\LogLevel::DEBUG,
-        queasy\log\ConsoleLogger::class => [
+        [
+            'class' => queasy\log\ConsoleLogger::class,
             'minLevel' => Psr\Log\LogLevel::INFO
-        ],
-        queasy\log\SimpleMailLogger::class => [
+        ], [
+            'class' => queasy\log\SimpleMailLogger::class,
             'minLevel' => Psr\Log\LogLevel::ALERT,
             'mailTo' => 'john.doe@example.com',
             'subject' => 'Website Alert'
         ]
-    ],
-    queasy\log\FileSystemLogger::class => [
+    ], [
+        'class' => queasy\log\FileSystemLogger::class,
         'path' => 'debug.log',
         'minLevel' => Psr\Log\LogLevel::INFO
     ]
@@ -140,7 +143,8 @@ $logger->info('Hello, world!');
 ```php
 <?php
 return [
-    queasy\log\FileSystemLogger::class => [
+    [
+        'class' => queasy\log\FileSystemLogger::class,
         'path' => 'debug-full.%s.log',
         'timeLabel' => 'Y-m-d',
         'minLevel' => Psr\Log\LogLevel::DEBUG

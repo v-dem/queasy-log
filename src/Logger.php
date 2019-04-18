@@ -12,6 +12,8 @@ namespace queasy\log;
 
 use Exception;
 
+use ArrayAccess;
+
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
@@ -42,7 +44,7 @@ class Logger extends AbstractLogger
      *
      * Logger class can be specified in config using 'class' option, by default Logger class will be used
      *
-     * @param array|queasy\config\ConfigInterface $config Logger config
+     * @param array|ArrayAccess $config Logger config
      *
      * @return int Integer log level value
      */
@@ -110,14 +112,14 @@ class Logger extends AbstractLogger
     /**
      * The config instance.
      *
-     * @var ConfigInterface
+     * @var array|ArrayAccess
      */
     private $config;
 
     /**
      * Constructor.
      *
-     * @param array|queasy\config\ConfigInterface $config Logger configuration
+     * @param array|ArrayAccess $config Logger configuration
      *
      * @throws InvalidArgumentException When a subordinated logger class doesn't exist or doesn't implement Psr\Log\LoggerInterface
      */
@@ -274,7 +276,7 @@ class Logger extends AbstractLogger
     /**
      * Sets a config.
      *
-     * @param array|queasy\config\ConfigInterface $config
+     * @param array|ArrayAccess $config
      */
     public function setConfig($config)
     {
@@ -320,13 +322,10 @@ class Logger extends AbstractLogger
         if (!$this->loggers) {
             $this->loggers = array();
 
-            foreach ($this->config() as $className => $section) {
-                if ((is_array($section) || is_object($section) && ('queasy\\config\\ConfigInterface' === get_class($section)))
+            foreach ($this->config() as $section) {
+                if ((is_array($section) || is_object($section) && ($section instanceof ArrayAccess))
                         && isset($section['class'])) {
-                    if (is_int($className)) {
-                        $className = $section['class'];
-                    }
-
+                    $className = $section['class'];
                     if (!class_exists($className)) {
                         throw InvalidArgumentException::loggerNotExists($className);
                     }
