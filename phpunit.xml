@@ -8,12 +8,8 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
          beStrictAboutTestsThatDoNotTestAnything="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutTestSize="true"
-         reportUselessTests="true"
-         disallowTestOutput="true">
+         beStrictAboutOutputDuringTests="true">
     <testsuites>
         <testsuite name="queasy-log tests">
             <directory suffix=".php">./tests/</directory>

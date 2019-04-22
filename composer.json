@@ -21,7 +21,8 @@
     },
     "require-dev": {
         "php": ">=7.1.0",
-        "phpunit/phpunit": "~7"
+        "phpunit/phpunit": "~7",
+        "ext-xdebug": "^2.6.0"
     },
     "autoload": {
         "psr-4": {
@@ -32,6 +33,9 @@
         "psr-4": {
             "queasy\\log\\tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit --coverage-clover clover.xml"
     }
 }
 
