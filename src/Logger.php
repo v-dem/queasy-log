@@ -55,6 +55,8 @@ class Logger extends AbstractLogger
         return new $class($config);
     }
 
+    private static $logLevels = null;
+
     /**
      * Translate log level word into an integer value.
      *
@@ -64,18 +66,20 @@ class Logger extends AbstractLogger
      */
     public static function level2int($level)
     {
-        $logLevels = array(
-            LogLevel::DEBUG => 0,
-            LogLevel::INFO => 1,
-            LogLevel::NOTICE => 2,
-            LogLevel::WARNING => 3,
-            LogLevel::ERROR => 4,
-            LogLevel::CRITICAL => 5,
-            LogLevel::ALERT => 6,
-            LogLevel::EMERGENCY => 7
-        );
+        if (is_null(self::$logLevels)) {
+            self::$logLevels = array(
+                LogLevel::DEBUG => 0,
+                LogLevel::INFO => 1,
+                LogLevel::NOTICE => 2,
+                LogLevel::WARNING => 3,
+                LogLevel::ERROR => 4,
+                LogLevel::CRITICAL => 5,
+                LogLevel::ALERT => 6,
+                LogLevel::EMERGENCY => 7
+            );
+        }
 
-        return array_key_exists($level, $logLevels) ? $logLevels[$level] : 0;
+        return array_key_exists($level, self::$logLevels)? self::$logLevels[$level]: 0;
     }
 
     /**

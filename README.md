@@ -38,7 +38,7 @@ Let's imagine we have the following `config.php`:
 <?php
 return [
     'logger' => [
-        'class' => queasy\log\FileSystemLogger, // Logger class
+        'class' => queasy\log\FileSystemLogger::class, // Logger class
         'processName' => 'test', // Process name, to differentiate log messages from different sources
         'minLevel' => Psr\Log\LogLevel::WARNING, // Message's minimum acceptable log level
         'path' => 'debug.log' // Path to logger output file
