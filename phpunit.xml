@@ -12,11 +12,11 @@
          beStrictAboutOutputDuringTests="true">
     <testsuites>
         <testsuite name="queasy-log tests">
-            <directory suffix=".php">./tests/</directory>
+            <directory suffix=".php">./tests/src/</directory>
         </testsuite>
     </testsuites>
     <logging>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" />
     </logging>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

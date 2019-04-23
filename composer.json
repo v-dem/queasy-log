@@ -34,11 +34,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "queasy\\log\\tests\\": "tests/"
+            "queasy\\log\\tests\\": "tests/src/"
         }
     },
     "scripts": {
-        "test": "phpunit --coverage-clover clover.xml"
+        "test": "./phpunit --coverage-clover clover.xml"
     }
 }
 
