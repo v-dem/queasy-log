@@ -254,20 +254,20 @@ class Logger extends AbstractLogger
     /**
      * Exceptions handler.
      *
-     * @param Throwable|Exception $ex Exception instance
+     * @param Throwable|Exception $e Exception instance
      *
      * @return bool Indicates whether exception was handled or not
      */
-    public function handleException($ex)
+    public function handleException($e)
     {
         $this->error('UNCAUGHT EXCEPTION.', array(
-            'exception' => $ex
+            'exception' => $e
         ));
 
         // TODO: Check if old handler is called automatically
         $oldHandler = $this->oldExceptionHandler();
         if ($oldHandler) {
-            return $oldHandler($ex);
+            return $oldHandler($e);
         }
 
         return false;
@@ -524,25 +524,25 @@ class Logger extends AbstractLogger
         }
 
         $result = '';
-        $ex = null;
+        $e = null;
         if (isset($context['exception'])) {
-            $ex = $context['exception'];
+            $e = $context['exception'];
 
-            if (interface_exists('\Throwable') && is_subclass_of($ex, '\Throwable')
-                    || ($ex instanceof Exception)) {
+            if (interface_exists('\Throwable') && is_subclass_of($e, '\Throwable')
+                    || ($e instanceof Exception)) {
                 $result .= sprintf('%s%s: %s in %s on line %s%sStack trace:%s%s%s',
                     PHP_EOL,
-                    get_class($ex),
-                    $ex->getMessage(),
-                    $ex->getFile(),
-                    $ex->getLine(),
+                    get_class($e),
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine(),
                     PHP_EOL,
                     PHP_EOL,
-                    $ex->getTraceAsString(),
+                    $e->getTraceAsString(),
                     PHP_EOL
                 );
 
-                $previous = $ex->getPrevious();
+                $previous = $e->getPrevious();
                 if (is_object($previous)) {
                     $result .= '---' . PHP_EOL;
                     $result .= $this->exceptionString(array('exception' => $previous));

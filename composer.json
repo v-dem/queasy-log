@@ -23,6 +23,9 @@
         "php": ">=7.1.0",
         "phpunit/phpunit": "~7"
     },
+    "suggest": {
+        "queasy/config": "Configuration provider package, supports PHP (and multifile configs in this case), INI, XML and JSON (and YAML in future) formats"
+    },
     "autoload": {
         "psr-4": {
             "queasy\\log\\": "src/"
