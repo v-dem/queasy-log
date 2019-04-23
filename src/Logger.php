@@ -50,7 +50,7 @@ class Logger extends AbstractLogger
      */
     public static function create($config)
     {
-        $class = $config('class', 'queasy\log\Logger');
+        $class = isset($config['class'])? $config['class']: 'queasy\log\Logger';
 
         return new $class($config);
     }
