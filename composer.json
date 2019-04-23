@@ -4,7 +4,7 @@
     "homepage": "https://github.com/v-dem/queasy-log/",
     "keywords": ["log", "logger", "logging", "php", "psr-3"],
     "license": "LGPL-3.0-only",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "minimum-stability": "dev",
     "authors": [
         {
@@ -38,7 +38,7 @@
         }
     },
     "scripts": {
-        "test": "./phpunit --coverage-clover clover.xml"
+        "test": "phpunit --coverage-clover clover.xml"
     }
 }
 
