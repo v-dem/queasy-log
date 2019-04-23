@@ -64,34 +64,18 @@ class Logger extends AbstractLogger
      */
     public static function level2int($level)
     {
-        switch (strtolower($level)) {
-            case LogLevel::DEBUG:
-                return 0;
+        $logLevels = array(
+            LogLevel::DEBUG => 0,
+            LogLevel::INFO => 1,
+            LogLevel::NOTICE => 2,
+            LogLevel::WARNING => 3,
+            LogLevel::ERROR => 4,
+            LogLevel::CRITICAL => 5,
+            LogLevel::ALERT => 6,
+            LogLevel::EMERGENCY => 7
+        );
 
-            case LogLevel::INFO:
-                return 1;
-
-            case LogLevel::NOTICE:
-                return 2;
-
-            case LogLevel::WARNING:
-                return 3;
-
-            case LogLevel::ERROR:
-                return 4;
-
-            case LogLevel::CRITICAL:
-                return 5;
-
-            case LogLevel::ALERT:
-                return 6;
-
-            case LogLevel::EMERGENCY:
-                return 7;
-
-            default:
-                return 0;
-        }
+        return array_key_exists($level, $logLevels) ? $logLevels[$level] : 0;
     }
 
     /**
