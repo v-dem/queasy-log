@@ -2,7 +2,7 @@
 
 ## Package `v-dem/queasy-log`
 
-Contains logger classes compatible with PSR-3 logger interface. Currently file system and console loggers are implemented.
+Contains logger classes compatible with [PSR-3](https://www.php-fig.org/psr/psr-3/) logger interface. Currently file system and console loggers are implemented.
 This package includes these types of logging:
 
 * Logger (base class, can be used as a container for other loggers)
