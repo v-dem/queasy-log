@@ -48,7 +48,7 @@ class Logger extends AbstractLogger
      *
      * @return int Integer log level value
      */
-    public static function create($config)
+    public static function create($config = array())
     {
         $class = isset($config['class'])? $config['class']: 'queasy\log\Logger';
 
@@ -493,7 +493,7 @@ class Logger extends AbstractLogger
     {
         return $errStr
             . ($errFile? ' in ' . $errFile: '')
-            . ($errLine? ' on line ' . $errLine: '');
+            . ($errLine? ':' . $errLine: '');
     }
 
     /**
@@ -518,7 +518,7 @@ class Logger extends AbstractLogger
 
             if (interface_exists('\Throwable') && is_subclass_of($e, '\Throwable')
                     || ($e instanceof Exception)) {
-                $result .= sprintf('%s%s: %s in %s on line %s%sStack trace:%s%s%s',
+                $result .= sprintf('%s%s: %s in %s:%s%sStack trace:%s%s%s',
                     PHP_EOL,
                     get_class($e),
                     $e->getMessage(),

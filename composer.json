@@ -1,6 +1,6 @@
 {
     "name": "v-dem/queasy-log",
-    "description": "Logger classes (currently supports file system and console logging), part of Queasy PHP Framework",
+    "description": "Logger classes (currently supports file system, console and simple email logging), part of Queasy PHP Framework",
     "homepage": "https://github.com/v-dem/queasy-log/",
     "keywords": ["log", "logger", "logging", "php", "psr-3"],
     "license": "LGPL-3.0-only",
@@ -20,7 +20,7 @@
         "psr/log": "~1.1"
     },
     "require-dev": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
         "phpunit/phpunit": "~7",
         "ext-xdebug": "^2.6.0"
     },
@@ -38,7 +38,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit --coverage-clover clover.xml"
+        "test": "phpunit --coverage-clover coverage.xml"
     }
 }
 
