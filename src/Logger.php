@@ -66,7 +66,7 @@ class Logger extends AbstractLogger
      */
     public static function level2int($level)
     {
-        if (is_null(self::$logLevels)) {
+        if (null === self::$logLevels) {
             self::$logLevels = array(
                 LogLevel::DEBUG => 0,
                 LogLevel::INFO => 1,
@@ -334,7 +334,7 @@ class Logger extends AbstractLogger
 
     protected function config()
     {
-        if (is_null($this->config)) {
+        if (null === $this->config) {
             $this->setConfig(array());
         }
 
@@ -462,7 +462,7 @@ class Logger extends AbstractLogger
     {
         if (is_object($message) || is_array($message)) {
             $message = print_r($message, true);
-        } elseif (!is_null($context)) {
+        } elseif (null !== $context) {
             foreach ($context as $key => $value) {
                 if (false !== strpos($message, '{' . $key . '}')) {
                     $message = str_replace('{' . $key . '}', $value, $message);
@@ -507,7 +507,7 @@ class Logger extends AbstractLogger
      */
     protected function exceptionString(array $context = null)
     {
-        if (is_null($context)) {
+        if (null === $context) {
             return '';
         }
 
