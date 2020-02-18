@@ -17,6 +17,15 @@ class FileSystemLogger extends Logger
 {
     const DEFAULT_PATH = 'debug.log';
 
+    private $path;
+
+    public function __construct($config = null, $setErrorHandlers = true)
+    {
+        parent::__construct($config, $setErrorHandlers);
+
+        $this->path = getcwd() . DIRECTORY_SEPARATOR . (isset($this->config['path'])? $this->config['path']: static::DEFAULT_PATH);
+    }
+
     /**
      * File system log method.
      *
@@ -42,7 +51,7 @@ class FileSystemLogger extends Logger
      */
     protected function path()
     {
-        return isset($this->config['path'])? $this->config['path']: static::DEFAULT_PATH;
+        return $this->path;
     }
 }
 
