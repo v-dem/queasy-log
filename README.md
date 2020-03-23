@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c7673721ff064b109ffa5d1f4fa92801)](https://app.codacy.com/manual/v-dem/queasy-log?utm_source=github.com&utm_medium=referral&utm_content=v-dem/queasy-log&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/v-dem/queasy-log.svg?branch=master)](https://travis-ci.com/v-dem/queasy-log)
 [![codecov](https://codecov.io/gh/v-dem/queasy-log/branch/master/graph/badge.svg)](https://codecov.io/gh/v-dem/queasy-log)
 [![Total Downloads](https://poser.pugx.org/v-dem/queasy-log/downloads)](https://packagist.org/packages/v-dem/queasy-log)
