@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.com/v-dem/queasy-log.svg?branch=master)](https://travis-ci.com/v-dem/queasy-log) [![codecov](https://codecov.io/gh/v-dem/queasy-log/branch/master/graph/badge.svg)](https://codecov.io/gh/v-dem/queasy-log)
+[![Build Status](https://travis-ci.com/v-dem/queasy-log.svg?branch=master)](https://travis-ci.com/v-dem/queasy-log)
+[![codecov](https://codecov.io/gh/v-dem/queasy-log/branch/master/graph/badge.svg)](https://codecov.io/gh/v-dem/queasy-log)
+[![Total Downloads](https://poser.pugx.org/v-dem/queasy-log/downloads)](https://packagist.org/packages/v-dem/queasy-log)
+[![License](https://poser.pugx.org/v-dem/queasy-log/license)](https://packagist.org/packages/v-dem/queasy-log)
 
 # [Queasy PHP Framework](https://github.com/v-dem/queasy-app/) - Logger
 
