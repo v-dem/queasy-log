@@ -51,7 +51,9 @@ class SimpleMailLogger extends Logger
      */
     protected function mailFrom()
     {
-        return isset($this->config['mailFrom'])? $this->config['mailFrom']: null;
+        return isset($this->config['mailFrom'])
+            ? $this->config['mailFrom']
+            : null;
     }
 
     /**
@@ -61,7 +63,9 @@ class SimpleMailLogger extends Logger
      */
     protected function mailTo()
     {
-        return isset($this->config['mailTo'])? $this->config['mailTo']: static::DEFAULT_MAIL_TO;
+        return isset($this->config['mailTo'])
+            ? $this->config['mailTo']
+            : static::DEFAULT_MAIL_TO;
     }
 
     /**
@@ -71,7 +75,9 @@ class SimpleMailLogger extends Logger
      */
     protected function subject()
     {
-        return isset($this->config['subject'])? $this->config['subject']: static::DEFAULT_SUBJECT;
+        return isset($this->config['subject'])
+            ? $this->config['subject']
+            : static::DEFAULT_SUBJECT;
     }
 }
 
