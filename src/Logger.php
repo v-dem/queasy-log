@@ -50,7 +50,9 @@ class Logger extends AbstractLogger
      */
     public static function create($config = array())
     {
-        $class = isset($config['class'])? $config['class']: 'queasy\log\Logger';
+        $class = isset($config['class'])
+            ? $config['class']
+            : 'queasy\log\Logger';
 
         return new $class($config);
     }
@@ -83,19 +85,19 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * @var array Subordinated loggers
-     */
-    private $loggers;
-
-    /**
      * @var callable Old error handler
      */
-    private $oldErrorHandler;
+    protected $oldErrorHandler;
 
     /**
      * @var callable Old exception handler
      */
-    private $oldExceptionHandler;
+    protected $oldExceptionHandler;
+
+    /**
+     * @var array Subordinated loggers
+     */
+    private $loggers;
 
     /**
      * The config instance.
@@ -231,9 +233,8 @@ class Logger extends AbstractLogger
         $this->log($logLevel, $this->errorString($errNo, $errStr, $errFile, $errLine));
 
         // TODO: Check if old handler is called automatically
-        $oldHandler = $this->oldErrorHandler();
-        if ($oldHandler) {
-            return $oldHandler($errNo, $errStr, $errFile, $errLine);
+        if ($this->oldErrorHandler) {
+            return $this->oldErrorHandler($errNo, $errStr, $errFile, $errLine);
         }
 
         return false;
@@ -246,16 +247,15 @@ class Logger extends AbstractLogger
      *
      * @return bool Indicates whether exception was handled or not
      */
-    public function handleException($e)
+    public function handleException($exception)
     {
         $this->error('UNCAUGHT EXCEPTION.', array(
-            'exception' => $e
+            'exception' => $exception
         ));
 
         // TODO: Check if old handler is called automatically
-        $oldHandler = $this->oldExceptionHandler();
-        if ($oldHandler) {
-            return $oldHandler($e);
+        if ($this->oldExceptionHandler) {
+            return $this->oldExceptionHandler($exception);
         }
 
         return false;
@@ -275,29 +275,9 @@ class Logger extends AbstractLogger
     {
         if ('config' === $field) {
             return $this->config;
-        } else {
-            InvalidArgumentException::unknownField($field);
         }
-    }
 
-    /**
-     * Return old error handler.
-     *
-     * @return callable Old error handler
-     */
-    protected function oldErrorHandler()
-    {
-        return $this->oldErrorHandler;
-    }
-
-    /**
-     * Return old exception handler.
-     *
-     * @return callable Old exception handler
-     */
-    protected function oldExceptionHandler()
-    {
-        return $this->oldExceptionHandler;
+        throw InvalidArgumentException::unknownField($field);
     }
 
     /**
@@ -348,7 +328,9 @@ class Logger extends AbstractLogger
      */
     protected function minLevel()
     {
-        return isset($this->config['minLevel'])? $this->config['minLevel']: static::DEFAULT_MIN_LEVEL;
+        return isset($this->config['minLevel'])
+            ? $this->config['minLevel']
+            : static::DEFAULT_MIN_LEVEL;
     }
 
     /**
@@ -358,7 +340,9 @@ class Logger extends AbstractLogger
      */
     protected function maxLevel()
     {
-        return isset($this->config['maxLevel'])? $this->config['maxLevel']: static::DEFAULT_MAX_LEVEL;
+        return isset($this->config['maxLevel'])
+            ? $this->config['maxLevel']
+            : static::DEFAULT_MAX_LEVEL;
     }
 
     /**
@@ -368,7 +352,9 @@ class Logger extends AbstractLogger
      */
     protected function processName()
     {
-        return isset($this->config['processName'])? $this->config['processName']: null;
+        return isset($this->config['processName'])
+            ? $this->config['processName']
+            : null;
     }
 
     /**
@@ -378,7 +364,9 @@ class Logger extends AbstractLogger
      */
     protected function timeFormat()
     {
-        return isset($this->config['timeFormat'])? $this->config['timeFormat']: static::DEFAULT_TIME_FORMAT;
+        return isset($this->config['timeFormat'])
+            ? $this->config['timeFormat']
+            : static::DEFAULT_TIME_FORMAT;
     }
 
     /**
@@ -388,7 +376,9 @@ class Logger extends AbstractLogger
      */
     protected function messageFormat()
     {
-        return isset($this->config['messageFormat'])? $this->config['messageFormat']: static::DEFAULT_MESSAGE_FORMAT;
+        return isset($this->config['messageFormat'])
+            ? $this->config['messageFormat']
+            : static::DEFAULT_MESSAGE_FORMAT;
     }
 
     /**
@@ -490,8 +480,12 @@ class Logger extends AbstractLogger
     protected function errorString($errNo, $errStr, $errFile = null, $errLine = null)
     {
         return $errStr
-            . ($errFile? ' in ' . $errFile: '')
-            . ($errLine? ':' . $errLine: '');
+            . ($errFile
+                ? ' in ' . $errFile
+                : '')
+            . ($errLine
+                ? ':' . $errLine
+                : '');
     }
 
     /**
@@ -510,25 +504,25 @@ class Logger extends AbstractLogger
         }
 
         $result = '';
-        $e = null;
+        $exception = null;
         if (isset($context['exception'])) {
-            $e = $context['exception'];
+            $exception = $context['exception'];
 
-            if (interface_exists('\Throwable') && is_subclass_of($e, '\Throwable')
-                    || ($e instanceof Exception)) {
+            if (interface_exists('\Throwable') && is_subclass_of($exception, '\Throwable')
+                    || ($exception instanceof Exception)) {
                 $result .= sprintf('%s%s: %s in %s:%s%sStack trace:%s%s%s',
                     PHP_EOL,
-                    get_class($e),
-                    $e->getMessage(),
-                    $e->getFile(),
-                    $e->getLine(),
+                    get_class($exception),
+                    $exception->getMessage(),
+                    $exception->getFile(),
+                    $exception->getLine(),
                     PHP_EOL,
                     PHP_EOL,
-                    $e->getTraceAsString(),
+                    $exception->getTraceAsString(),
                     PHP_EOL
                 );
 
-                $previous = $e->getPrevious();
+                $previous = $exception->getPrevious();
                 if (is_object($previous)) {
                     $result .= '---' . PHP_EOL;
                     $result .= $this->exceptionString(array('exception' => $previous));
