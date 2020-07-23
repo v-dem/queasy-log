@@ -433,9 +433,7 @@ class Logger extends AbstractLogger
      */
     protected function ipAddressString()
     {
-        if (isset($_SERVER) && isset($_SERVER['REMOTE_ADDR'])) {
-            return $_SERVER['REMOTE_ADDR'];
-        }
+        return filter_input(INPUT_SERVER, 'REMOTE_ADDR');
     }
 
     /**

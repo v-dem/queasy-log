@@ -84,9 +84,9 @@ class ConsoleLogger extends Logger
     {
         return
             ((DIRECTORY_SEPARATOR === "\\")
-                && ((false !== getenv('ANSICON'))
-                    || ('on' === strtolower(getenv('ConEmuANSI')))
-                    || ('xterm' === strtolower(getenv('TERM')))))
+                && ((false !== filter_input(INPUT_ENV, 'ANSICON'))
+                    || ('on' === strtolower(filter_input(INPUT_ENV, 'ConEmuANSI')))
+                    || ('xterm' === strtolower(filter_input(INPUT_ENV, 'TERM')))))
             || (function_exists('posix_isatty')
                 && @posix_isatty(STDERR));
     }
