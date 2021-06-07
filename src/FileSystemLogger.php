@@ -23,7 +23,7 @@ class FileSystemLogger extends Logger
     {
         parent::__construct($config, $setErrorHandlers);
 
-        $this->path = getcwd() . DIRECTORY_SEPARATOR . (isset($this->config['path'])? $this->config['path']: static::DEFAULT_PATH);
+        $this->path = (isset($this->config['path'])? $this->config['path']: static::DEFAULT_PATH);
     }
 
     /**
