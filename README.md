@@ -4,7 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/v-dem/queasy-log/downloads)](https://packagist.org/packages/v-dem/queasy-log)
 [![License](https://poser.pugx.org/v-dem/queasy-log/license)](https://packagist.org/packages/v-dem/queasy-log)
 
-# [Queasy PHP Framework](https://github.com/v-dem/queasy-app/) - Logger
+# [QuEasy PHP Framework](https://github.com/v-dem/queasy-framework/) - Logger
 
 ## Package `v-dem/queasy-log`
 
