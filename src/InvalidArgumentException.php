@@ -22,7 +22,7 @@ class InvalidArgumentException extends PsrLogInvalidArgumentException
         return new InvalidArgumentException(sprintf('Logger class "%s" does not exist.', $className));
     }
 
-    public static function notImplementsInterface($className, $interfaceName)
+    public static function interfaceNotImplemented($className, $interfaceName)
     {
         return new InvalidArgumentException(sprintf('Logger class "%s" does not implement "%s".', $className, $interfaceName));
     }

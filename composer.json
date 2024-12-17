@@ -4,7 +4,7 @@
     "homepage": "https://github.com/v-dem/queasy-log/",
     "keywords": ["log", "logger", "logging", "php", "psr-3"],
     "license": "LGPL-3.0-only",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "minimum-stability": "dev",
     "authors": [
         {
@@ -20,9 +20,9 @@
         "psr/log": "~1.1"
     },
     "require-dev": {
-        "php": ">=7.2.0",
-        "phpunit/phpunit": "~7",
-        "ext-xdebug": "^2.6.0"
+        "php": ">=7.2.0|^8",
+        "phpunit/phpunit": "^10",
+        "ext-xdebug": "^2.6.0|^3"
     },
     "provide": {
         "psr/log-implementation": "1.0.0"
@@ -41,7 +41,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit --coverage-clover coverage.xml"
+        "test": "XDEBUG_MODE=coverage phpunit --coverage-clover coverage.xml"
     }
 }
 
