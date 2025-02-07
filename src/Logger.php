@@ -234,7 +234,9 @@ class Logger extends AbstractLogger
 
         // TODO: Check if old handler is called automatically
         if ($this->oldErrorHandler) {
-            return $this->oldErrorHandler($errNo, $errStr, $errFile, $errLine);
+            $handler = $this->oldErrorHandler;
+
+            return $handler($errNo, $errStr, $errFile, $errLine);
         }
 
         return false;
@@ -255,7 +257,9 @@ class Logger extends AbstractLogger
 
         // TODO: Check if old handler is called automatically
         if ($this->oldExceptionHandler) {
-            return $this->oldExceptionHandler($exception);
+            $handler = $this->oldExceptionHandler;
+
+            return $handler($exception);
         }
 
         return false;
